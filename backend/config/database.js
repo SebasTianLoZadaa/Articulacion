@@ -1,5 +1,6 @@
-/**CONFIGURACION DE LA BASE DE DATOS */
-
+/**
+ * CONFIGURACIÓN DE LA BASE DE DATOS
+ */
 // Importar Sequelize
 const { Sequelize } = require('sequelize');
 
@@ -36,7 +37,7 @@ const sequelize = new Sequelize (
         //Opciones adicionales 
         define: { 
             // Agrega los campos createdAt y updatedAt
-            timestramps: true,
+            timestamps: true,
 
             // underscored: true, // Usa snake_case para los nombres de columnas
             underscored: false,
@@ -51,9 +52,10 @@ const sequelize = new Sequelize (
 /* funcion para probar la conexion de la base de datos esta funcion se kkamara al inicar el servidor */
 const testConnection = async () => {
     try {
-       // Intenta autenticar con la base de datos 
-       await sequelize.authenticate();
-       console.log('Conexion a ,MySQL establecida correctamente');
+       // Intenta autenticar con la base de datos //
+    await sequelize.authenticate();
+    console.log('Conexion a ,MySQL establecida correctamente');
+    return true;
     } catch (error) {
         console.error(' X Error al conectar con MySQL:', error.message);
 
@@ -62,3 +64,36 @@ const testConnection = async () => {
     }
 
 }
+
+//"Funcion para sincronizar los modelos con la base de datos "
+//esta funcion creara las tablas automaticamente basandose en los modelos
+// Exportar la instancia de sequelize y la funcion de prueba de conexion param {bolean} alter si es true, modifica las tablas existentes para que coincidan con los modleos*/
+
+const syncDatabase = async (force = false, alter = false ) => {
+    try {
+        //sincronizar todos los modelos con la base de datos
+        await sequelize.sync({ force, alter });
+
+        if (force) {
+            console.log('Base de datos sincronizada con (todas las tablas recreadas).');
+        } else if (alter) {
+            console.log('Base de datos sincronizada (tablas alteradas segun los modelos).');
+        }  else {
+            console.log('Base de datos sincronizada correctamente.');
+        }
+
+
+        return true ;
+    } catch (error) {
+        console.error(' X Error al sincronizar la base de datos:', error.message);
+        return false;
+    }
+
+};
+
+ //Exportar la instancia de sequelize y las funciones
+    module.exports = {
+        sequelize,
+        testConnection,
+        syncDatabase
+    };
