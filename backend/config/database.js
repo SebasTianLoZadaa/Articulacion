@@ -49,7 +49,7 @@ const sequelize = new Sequelize (
     }
 );
 
-/* funcion para probar la conexion de la base de datos esta funcion se kkamara al inicar el servidor */
+// funcion para probar la conexion de la base de datos esta funcion se llara al inicar el servidor //
 const testConnection = async () => {
     try {
        // Intenta autenticar con la base de datos //
