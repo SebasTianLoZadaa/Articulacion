@@ -1,8 +1,4 @@
 
-Ciro Sanchez
-mar, 10 feb, 5:14 p.m. (hace 21 horas)
-para adriangallego714, felipefigueredobustos, mí
-
 /**
  * CONFIGURACION DE JWT
  * Este archivo contiene funviones para generar y verificar tokens jwt
