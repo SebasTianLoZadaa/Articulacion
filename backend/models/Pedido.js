@@ -1,7 +1,7 @@
 /**
- * Modelo pedido
+ * Modelo Pedido
  * define la tabla pedido en la base datos
- * almacena la informacion de los pedidos realizados por los usuarios 
+ * almacena la informacion de los pedidos relizados por los usuarios
  */
 
 //Importar DataTrypes de sequelize
@@ -9,13 +9,14 @@ const { DataTypes } = require('sequelize');
 
 //Importar instancia de sequelize
 const {sequelize} = require('../config/database');
-const { type } = require('os');
+const { type } = require('node:os');
+const { before } = require('node:test');
 
 
 /**
- * Definir el modelo de Pedido 
+ * Definir el modelo de pedido
  */
-const Pedido  = sequelize.define('Pedido', {
+const Pedido = sequelize.define('Pedido', {
     //Campos de la tabla 
     //Id Indentificador unico (PRIMARY KEY)
     id: {
@@ -27,17 +28,16 @@ const Pedido  = sequelize.define('Pedido', {
     },
 
 
-    // UsuarioId ID del usuario dueño del pedido 
+    // UsuarioId ID del usuario que realizo el pedido
     usuarioId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-
             model: 'Usuarios',
             key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT', // no se puede eliminar un usuario con pedidos 
+        onDelete: 'RESTRICT', // no se puede eliminar el usuario si tiene pedidos
         validate: {
             notNull: {
                 msg: 'Debe especificar su usuario'
@@ -73,127 +73,92 @@ const Pedido  = sequelize.define('Pedido', {
         allowNull: true
     },
 
-    // Total monto total del pedido 
+    // Total monto del pedido
     total: {
-        type: DataTypes.DECIMAL(10,2),
-        allowNull: false, 
-        validate:{
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        validate: {
             isDecimal: {
                 msg: 'El total debe ser un numero decimal valido'
             },
-
-        min: {
-            args: [0],
-            msg: 'El total no puede ser negativo'
-        
+            min: {
+                args: [0],
+                msg: 'El total no puede ser negativo'
             }
         }
     },
 
     /**
-     * Estado - estado actual del pedido 
-     * valores posibles
-     * pemdiemte: pedido creado, esperando pago 
-     * pagado: pedido pagado en preparacion
+     * Estado - estado actual del pedido
+     * valores posibles:
+     * pendiente: pedido creado, esperando pago
+     * pagado: pedido paado, en preparacion
      * enviado: pedido enviado al cliente
-     * cancelado: pedido cancelado
+     * cancelado: pedido cancelado 
      */
+
     estado: {
-        type : DataTypes.ENUM ('Pendiente','Pagado', 'Enviado', 'Cancelado'),
-        allowNull: false, 
+        type: DataTypes.ENUM('Pendiente', 'Pagado', 'Enviado', 'Cancelado'),
+        allowNull: false,
         defaultValue: 'Pendiente',
         validate: {
-            isIN: {
-                Args: [['pendiente', 'pagado', 'enviado', 'cancelado']]
+            isIn: {
+                args: [['Pendiente', 'Pagado', 'Enviado', 'Cancelado']],
             }
         }
     },
 
-    // Direccion de envio del pedido 
+    //Direccion de envio del pedido
+
     direccionEnvio: {
         type: DataTypes.TEXT,
-        allowNull:false,
+        allowNull: false,
         validate: {
             notEmpty: {
-                msg: 'la direccion de envio es obligatoria'
+                msg: 'La direccion de envio es obligatoria'
             }
         }
     },
-    //Telefono de contacto para el envio
+
+    // Telefono de contacto para el envio
     telefono: {
         type: DataTypes.STRING(20),
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: 'El telefono es obligatorio'
+                msg: 'El telefono de contacto es obligatorio'
             }
         }
     },
+
     // notas adicionales del pedido (opcional)
     notas: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: true
+    },
+
+    //Fecha de pago 
+    fechaPago: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+
+     //Fecha de envio
+    fechaEnvio: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+
+     //Fecha de entrega
+    fechaEntrega: {
+        type: DataTypes.DATE,
+        allowNull: true
     },
 
 
-
-
-     // Producto ID del producto en el carrito 
-    productoId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-
-            model: 'Productos',
-            key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE', // elimina el producto del carrito
-        validate: {
-            notNull: {
-                msg: 'Debe especificar su producto'
-
-            }
-
-        }
-    },
-
-    // Cantidad de este producto en el carrito
-    cantidad: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 1,
-        validate: {
-            isInt: {
-                msg: 'La cantidad debe ser un numero entero'
-            },
-            min: {
-                args: [1],
-                msg: 'La cantidad debe ser al menos 1'
-            }
-        }
-    },
-
-    /**
-     * Precio Unitario del producto al momento de agregarlo al carrito
-     * se guarda para mantener el precio aunque el producto cambie de precio 
-     */
-    precioUnitario: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        validate: {
-            isDecimal: {
-                msg: 'El precio debe ser un numero decimal valido'
-            },
-            min: {
-                args: [0],
-                msg: 'El precio no puede ser negativo'
-            }
-        }
-    }
 }, {
     //opciones del modelo
-    tableName: 'carritos',
+    tableName: 'pedidos',
     timestamp: true,
     //indice para mejorar las busquesdas
     indexes: [
@@ -201,12 +166,17 @@ const Pedido  = sequelize.define('Pedido', {
             //indice para buscar carrito por usuario
             fields: ['usuarioId']
         },
+
         {
-            //Indice compuesto: un usuario no puede tener el mismo producto duplicado
-        unique: true,
-        fields: ['usuarioId', 'productoId'],
-        name: 'usuario_producto_unique'
-        }
+            //indice para buscar pedidos por estado
+            fields: ['estado']
+        },
+
+        {
+            //indice para buscar pedidos por fecha
+            fields: ['createdAt']
+        },
+
     ],
     /**
          * Hooks Acciones automaticas
@@ -218,7 +188,7 @@ const Pedido  = sequelize.define('Pedido', {
              *verifica que este activo y tenga stock suficiente para agregarlo al carrito
              */
 
-             beforeCreate: async (itemCatrrito, options) => {
+             /**beforeCreate: async (itemCatrrito, options) => {
                 const Categoria = require('./Producto');
 
                 //buscar producto
@@ -243,26 +213,39 @@ const Pedido  = sequelize.define('Pedido', {
              },
 
               /**
-             *beforeUpdate. se ejecuta antes de actualizar un carrito
-             *valida que haya stock suficiente si se aumenta la cantidad 
+             *afterUpdate. se ejecuta despues de actualizar un pedido
+             *actualiza las fechas segun el estado
              */
 
             
-            BeforeUpdate: async (itemCarrito, options) => {
-                //verificar si el campo activo se cambio
-                if (itemCarrito.changed('cantidad')) {
-                    const Producto = require('./Producto');
-                    const producto = await Producto.findByPk(itemCarrito.productoId);
+            afterUpdate: async (pedido) => {
+                //si es estado cambio a pagado, guardar fecha de pago
+                if (pedido.changed('estadoo') && pedido.estado === 'Pagado') {
+                    pedido.fechaPago = new Date();
+                    await pedido.save({hooks: false}); // guardar sin ejecutar hooks para evitar loop infinito
+                
+                    //si el estado cambio a enviado, guardar fecha de envio
 
-                    if (!producto) {
-                        throw new Error('El producto seleccionado no existe'); 
-                    }
-
-                    if (!producto.hayStock(itemCarrito.cantidad)) {
-                        throw new Error(`Stock insuficiente, solo hay ${producto.stock} unidades disponibles`);
+                    if (pedido.changed('estado') && pedido.estado === 'Enviado' && !pedido.fechaEnvio) { 
+                        pedido.fechaEnvio = new Date();
+                        await pedido.save({hooks: false});
                     }
                 }
+                    //si el estado cambio a entregado, guardar fecha de entrega
+
+                    if (pedido.changed('estado') && pedido.estado === 'Entregado' && !pedido.fechaEntrega) { 
+                        pedido.fechaEntrega = new Date();
+                        await pedido.save({hooks: false});  
                     
+                }
+                    
+        },
+
+        /**
+         * beforeDestry: se ejecuta antes de elimibar un pedido
+         */
+        beforeDestroy: async () => {
+            throw new Error('No se puede eliminar un pedido, use el estado "Cancelado" en su lugar');
         }
     }
 });
@@ -270,14 +253,33 @@ const Pedido  = sequelize.define('Pedido', {
 // METODOS DE INSTANCIA
 
 /**
- * Metodo para calcular el subtotal de este item
- *
+ * Metodo para cambiar el estado del pedido
+ *@param {string} nuevoEstado - nuevo estado del pedido
  * @returns {number} - Subtotal (precio * canridad)
  */
-Carrito.prototype.calcularSubtotal = async function() {
-    return parseFloat(this.precioUnitario) * this.cantidad;
-   
+Pedido.prototype.cambiarEstado = async function(nuevoEstado) {
+    const estadosValidos = ['Pendiente', 'Pagado', 'Enviado', 'Cancelado'];
+    if (!estadosValidos.includes(nuevoEstado)) {
+        throw new Error(`Estado invalido.`);
+    }
+    this.estado = nuevoEstado;
+    return await this.save();
 };
+
+/**
+ * Metodo para verificar si el pedido puede ser cancelado
+ * solo se puede cancelar si esta en estado pendiente o pagado
+ * @return {boolean} - true si se puede cancelar, false en caso contrario
+ */
+
+Pedido.prototype.puedeCancelar = function() {
+    return ['Pendiente', 'Pagado'].includes(this.estado);
+}
+
+
+
+
+
 
 /**
  * Metodo para actualizar la cantidad
@@ -285,69 +287,96 @@ Carrito.prototype.calcularSubtotal = async function() {
  * @returns {Promise} Item actualizado *
  */
 
-Carrito.prototype.actualizarCantidad = async function(nuevaCantidad) {
-    const Producto = require('./Producto');
-    const producto = await Producto.findByPk(this.productoId);
+Pedido.prototype.cancelar = async function(nuevaCantidad) {
 
-    if (!producto.hayStock(nuevaCantidad)) {
-        throw new Error(`Stock insuficiente, solo hay ${producto.stock} unidades disponibles`);
+    if (!this.puedeSerCancelado()) {
+        throw new Error('este pedido no puede ser cnacelado');
     }
 
+    //Importar modelos
+    const DetallePedido = require('./DetallePedido');
+    const Producto = require('./Producto');
+
+    //Obtener detalles del pedido
+    const detalles = await DetallePedido.findAll({
+        where: { pedidoId: this.id }
+    });
+
+    // devolver el stock de cada producto
+    for (const detalle of detalles) {
+        const producto = await Producto.findByPk(detalle.productoId);
+        if (producto) {
+            await producto.aumentarStock(detalle.cantidad);
+            console.log(`Stock devuelto: ${detalle.cantidad} X ${producto.nombre}`);
+        }
+    }
+
+    //Cambiar estado a cancelado
+        this.estado = 'Cancelado';
+        return await this.save();
+
+
+
+
     this.cantidad = nuevaCantidad;
-    return await this.save();
+    return await this.save(); 
 
 };
 
 /**
- * Metodo para obtener el carrito completo de un usuario
- * incluye informacion de los productos
- * @param {number} usuarioId - ID del usuario
- * @returns {Promise<Array>} - Items del carrito con prodsuctos 
+ * Metodo para obtener detalles del pedido con productos 
+ * @returns {Promise<Array>} - Detalles del pedido 
  */
-Carrito.obtenerCarritoUsuario = async function (usuarioId) {
-    const Produto = require('./Producto');
-
-    return await Carrito.findAll({
-        where: { usuarioId },
+Pedido.prototype.obtenerDetalles = async function () {
+    const DetallePedido = require('./DetallePedido');
+    const Producto = require('./Producto');
+    
+    
+    return await DetallePedido.findAll({
+        where: { pedidoId: this.id },
         include: [
             {
                 model: Producto,
                 as: 'producto'
             }
+        ]
+    });
+};
+
+/**
+ * Metodo para obtener pedidos por estado
+ * @param {string} estado estado a filtrar
+ * @return {Promise<Array>} - pedidos filtrados
+ */
+Pedido.obtenerPorEstado = async function (estado) {
+    const Usuario = require ('./Usuario');
+    return await this.findAll({
+        where:{ estado },
+        include: [
+            {
+                model: Usuario,
+                as: 'usuario',
+                attributes: ['id', 'nombre', 'email', 'telefono']
+            
+            }
         ],
+        order: [['createdAt', 'DESC']]
+    });
+
+};
+
+/**
+ * Metodo para obtener historial de pedidos de un usuario
+ * @param {number} usuarioId - ID del usuario
+ * @returns {Promise<number>} - pedidos del usuario
+ */
+Pedido.obtenerHistorialUsuario = async function (usuarioId) {
+    return await this.findAll({
+        where: { usuarioId },
         order: [['createdAt', 'DESC']]
     });
 };
 
-/**
- * Metodo para calcular el total del carrito de un usuario
- * @param {number} usuarioId - ID del usuario
- * @return {Promise<number>} - Total del carrito
- */
-Carrito.calcularTotalCarrito = async function (usuarioId) {
-    const items= await this.findAll({
-        where:{ usuarioId }
-    })
-
-    let total = 0;
-    for (const item of items) {
-        total += item.calcularSubtotal();
-    }
-    return total;
-};
-
-/**
- * Metodo para vaciar el carrito de un usuario 
- * util despues de reliazar un pedido 
- * @param {number} usuarioId - ID del usuario
- * @returns {Promise<number>} - Cantidad de items eliminados
- */
-
-Carrito.vaciarCarrito = async function(usuarioId) {
-    return await this.destroy({
-        where: { usuarioId }
-    });
-};
-
 // Exportar el modelo
-module.exports = Carrito;
+module.exports = Pedido;
+
