@@ -172,12 +172,12 @@ const DetallePedido = sequelize.define('DetallePedido', {
              *Calcula el subtotal automaticamente
              */
 
-             beforeCreate: (detalle) => {
+            beforeCreate: (detalle) => {
                 // calcular subtotal precio * cantidad
                 detalle.subtotal = parseFloat(detalle.precioUnitario) * detalle.cantidad;
-             },
+            },
 
-              /**
+            /**
              *beforeUpdate. se ejecuta antes de actualizar detalle de pedido
              *recalcula el subtotal si se actualiza la cantidad o el precio 
              */
@@ -260,5 +260,5 @@ DetallePedido.obtenerMasVendidos = async function (limite = 10 ) {
     });
 };
 
-// Exportar el modelo
-module.exports = Carrito;
+// Exportar el modelo DetallePedido
+module.exports = DetallePedido;

@@ -83,26 +83,26 @@ const Categoria = sequelize.define('Subcategoria', {
 
     },
 
-     }, {
+    }, {
         //opciones del modelo
 
         tableName: 'subcategorias',
         timestamps: true, // agrega campos createdAt y updatedAt
 
         /**
-         * Indices compuestos para optimizar busquedas 
+         * Indices compuestos para optimizar busquedas
          */
         indexes: [
             {
                 //Indice para buscar subcategorias por categoria
-                fields : ['categoriaId'] 
+                fields : ['categoriaId']
             },
             {
                 //Indice compuesto: nombre unico por categoria
                 //permite que dos categorias diferesdntes tengan subcategorias con el mismo nombre
                 unique: true,
                 fields: ['nombre', 'categoriaId'],
-                name: 'nombre_categoria_unique' 
+                name: 'nombre_categoria_unique'
             }
         ],
 
@@ -113,10 +113,10 @@ const Categoria = sequelize.define('Subcategoria', {
         hooks:{
             /**
              *beforeCreate - se ejecuta antes de crear una subcategoria
-             *verifica que la categoria padre este activa 
+             *verifica que la categoria padre este activa
              */
 
-             beforeCreate: async (subcategoria) => {
+            beforeCreate: async (subcategoria) => {
                 const Categoria = require('./Categoria');
 
                 //buscar categoria padre
@@ -131,9 +131,9 @@ const Categoria = sequelize.define('Subcategoria', {
                     throw new Error('No se puede crear una subcategoria en una categoria inactiva');
                 }
 
-             },
+            },
 
-              /**
+            /**
              *afterUpdate. se ejecuta despues de actualizar una categoria
              *si se desactiva una categoria se desactivan todas sus subcategorias y productos
              */
@@ -176,7 +176,7 @@ const Categoria = sequelize.define('Subcategoria', {
     }
 });
 
-// METODOS DE INSTANCIA 
+// METODOS DE INSTANCIA
 
 /**
  * Metodo para contar subcategorias de esta categoria
@@ -198,6 +198,6 @@ Subcategoria.prototype.obtenerCategoria = async function() {
 
 
 
-//Exportar modelo Categoria
-module.exports = Categoria;
+//Exportar modelo Subcategoria
+module.exports = Subcategoria;
 
