@@ -11,7 +11,6 @@
 const Categoria = require('../models/Categoria');
 const Subcategoria = require('../models/Subcategoria');
 const Producto = require('../models/Producto');
-const { count } = require('node:console');
 
 /**
  * Obtener todas la categorias
