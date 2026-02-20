@@ -191,3 +191,136 @@ const crearCategoria = async (req, res) => {
     })
 }
 };
+
+/**
+ * Actualizar una categoria
+ * PUT /api/categorias/:id
+ * body: { nombre, descripcion }
+ * @param {Object} req - Response express
+ * @param {Object} res - Response express
+ */
+
+const actualizarCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre, descripcion } = req.body;
+
+        // Buscar categoria por id 
+        const categoria = await Categoria.findByPk(id);
+
+        if (!categoria) {
+            return res.status(404).json({
+                success: false,
+                message: 'Categoria no encontrada'
+            });
+        }
+
+        // Validacion 1 si se cambia el nombre verificar que no existe
+        if (nombre && nombre !== categoria.nombre) {
+            const categoriaExistente = await Categoria.findOne({ where: { nombre } });
+
+            if (categoriaConMismoNombre) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Ya existe una categoria con el nombre "${nombre}"`
+                });
+            }
+        }
+
+        // Actualizar categoria
+        await categoria.update({
+            nombre: nombre || categoria.nombre,
+            descripcion: descripcion || categoria.descripcion
+        });
+
+        //Actualizar campos
+        if (nombre !== undefined) categoria.nombre = nombre;
+        if (descripcion !== undefined) categoria.descripcion = descripcion;
+        if (activo !== undefined) categoria.activo = activo;
+
+        // guardar cambios
+        await categoria.save();
+
+        // Respuesta exitosa
+        res.json({
+            success: true,
+            message: 'Categoria actualizada exitosamente',
+            data: {
+                categoria
+            }
+        });
+
+    } catch (error) {
+        console.error('Error en actualizarCategoria:', error);
+        if (error.name === 'SequelizeValidationError') { 
+            return res.status(400).json({
+                success: false,
+                message: 'Error de validacion',
+                error: error.message.map(e => e.message)
+            })
+        }
+
+        res.status(500).json({
+            success: false,
+            message: 'Error al actualizar categoria',
+            error: error.message
+        });
+    }
+};
+
+/**
+ * Activar o desactivar una categoria
+ * PATCH /api/categorias/:id/estado
+ *
+ * Al desactivar una categoria se desactivan todas sus subcategorias relacionadas
+ * Al desactivar una subcategoria se desactivan todos sus productos relacionados
+ * @param {Object} req - Request express
+ * @param {Object} res - Response express
+ */
+
+const toggleCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { activo } = req.body;
+
+        // Buscar categoria
+        const categoria = await Categoria.findByPk(id);
+
+        if (!Categoria) {
+            return res.status(404).json({
+                success: false,
+                message: 'Categoria no encontrada'
+            });
+            
+        }
+        //Alternar estado activo
+        const nuevoEstado = !categoria.activo;
+        categoria.activo = nuevoEstado;
+
+        //Guardar cambios
+        await categoria.save();
+
+        //Contar cuantos regiustros se afectaron
+        const subcategoriasAfectadas = await Subcategoria.count({ where: { categoriaId: id } });
+
+        const productosAfectados = await Producto.count({ where: { categoriaId: id } });
+
+        //Respuesta exitosa
+        res.json({
+            success: true,
+            message: `Categoria ${nuevoEstado ? 'activada' : 'desactivada'} exitosamente`,
+            data: {
+                categoria,
+                afectados: {
+                    subcategorias:
+                    subcategoriasAfectadas,
+                    productos: productosAfectados
+                }
+                
+            }
+        })
+    
+    
+    
+    }
+}
