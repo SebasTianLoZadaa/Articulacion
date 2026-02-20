@@ -16,10 +16,10 @@ const { parse } = require('node:path');
 
 
 /**
- * Definir el modelo DetallePedido 
+ * Definir el modelo DetallePedido
  */
 const DetallePedido = sequelize.define('DetallePedido', {
-    //Campos de la tabla 
+    //Campos de la tabla
     //Id Indentificador unico (PRIMARY KEY)
     id: {
         type: DataTypes.INTEGER,
@@ -76,7 +76,7 @@ const DetallePedido = sequelize.define('DetallePedido', {
         allowNull: true
     },
 
-     // Producto ID del producto en el carrito 
+     // Producto ID del producto en el carrito
     productoId: {
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -188,7 +188,7 @@ const Pedido = sequelize.define('Pedido', {
              *verifica que este activo y tenga stock suficiente para agregarlo al carrito
              */
 
-             /**beforeCreate: async (itemCatrrito, options) => {
+            /**beforeCreate: async (itemCatrrito, options) => {
                 const Categoria = require('./Producto');
 
                 //buscar producto
@@ -210,9 +210,9 @@ const Pedido = sequelize.define('Pedido', {
                 //Guardar el precio actual del producto
                 itemCarrito.precioUnitario = producto.precio;
 
-             },
+            },
 
-              /**
+            /**
              *afterUpdate. se ejecuta despues de actualizar un pedido
              *actualiza las fechas segun el estado
              */
@@ -319,13 +319,13 @@ Pedido.prototype.cancelar = async function(nuevaCantidad) {
 
 
     this.cantidad = nuevaCantidad;
-    return await this.save(); 
+    return await this.save();
 
 };
 
-/**
- * Metodo para obtener detalles del pedido con productos 
- * @returns {Promise<Array>} - Detalles del pedido 
+/*
+ * Metodo para obtener detalles del pedido con productos
+ * @returns {Promise<Array>} - Detalles del pedido
  */
 Pedido.prototype.obtenerDetalles = async function () {
     const DetallePedido = require('./DetallePedido');
