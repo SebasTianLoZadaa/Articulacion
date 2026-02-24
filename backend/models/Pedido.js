@@ -17,7 +17,7 @@ const { before } = require('node:test');
  * Definir el modelo de pedido
  */
 const Pedido = sequelize.define('Pedido', {
-    //Campos de la tabla 
+    //Campos de la tabla
     //Id Indentificador unico (PRIMARY KEY)
     id: {
         type: DataTypes.INTEGER,

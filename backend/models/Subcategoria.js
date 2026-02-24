@@ -90,19 +90,19 @@ const Categoria = sequelize.define('Subcategoria', {
         timestamps: true, // agrega campos createdAt y updatedAt
 
         /**
-         * Indices compuestos para optimizar busquedas
+         * Indices compuestos para optimizar busquedas 
          */
         indexes: [
             {
                 //Indice para buscar subcategorias por categoria
-                fields : ['categoriaId']
+                fields : ['categoriaId'] 
             },
             {
                 //Indice compuesto: nombre unico por categoria
                 //permite que dos categorias diferesdntes tengan subcategorias con el mismo nombre
                 unique: true,
                 fields: ['nombre', 'categoriaId'],
-                name: 'nombre_categoria_unique'
+                name: 'nombre_categoria_unique' 
             }
         ],
 
@@ -113,7 +113,7 @@ const Categoria = sequelize.define('Subcategoria', {
         hooks:{
             /**
              *beforeCreate - se ejecuta antes de crear una subcategoria
-             *verifica que la categoria padre este activa
+             *verifica que la categoria padre este activa 
              */
 
             beforeCreate: async (subcategoria) => {
@@ -145,7 +145,7 @@ const Categoria = sequelize.define('Subcategoria', {
                     console.log(`Desactivando categoria: ${categoria.nombre}`);
 
                     //Importar modelos (aqui para evitar dependencias circulares)
-                    const { Subcategoria } = require('./Subcategoria');
+                    const { Subcategoria } = require('./subcategoria');
                     const producto = require('./Producto');
                     
                     try {
@@ -183,7 +183,7 @@ const Categoria = sequelize.define('Subcategoria', {
  *
  * @returns {Promise<number>} - numero de subcategorias
  */
-Subcategoria.prototype.contarproductos = async function() {
+Subcategoria.prototype.contarProductos = async function() {
     const  Producto  = require('./Producto');
     return await Producto.count({ where: { subcategoriaId: this.id } });
 };
@@ -200,4 +200,3 @@ Subcategoria.prototype.obtenerCategoria = async function() {
 
 //Exportar modelo Subcategoria
 module.exports = Subcategoria;
-

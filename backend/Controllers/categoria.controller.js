@@ -8,7 +8,7 @@
  * Importar modelos
  */
 const Categoria = require('../models/Categoria');
-const subcategoria = require('../models/Subcategoria');
+const Subcategoria = require('../models/subcategoria');
 const Producto = require('../models/Producto');
 
 /**
@@ -210,7 +210,7 @@ const actualizarCategoria = async (req, res) => {
             });
         }
 
-        //Validacion 1 si se camvia el nombre verificar que no exista
+        //Validacion 1 si se cambia el nombre verificar que no exista
         if (nombre && nombre !== categoria.nombre) {
             const categoriaConMisNombre = await
             Categoria.findOne({where: {nombre}

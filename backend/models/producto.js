@@ -179,7 +179,7 @@ const Producto = sequelize.define('Producto', {
          */
         beforeCreate: async (producto) => {
             const categoria = require('./Categoria');
-            const subcategoria = require('./Subcategoria');
+            const subcategoria = require('./subcategoria');
 
             //Buscar subcategoria padre
             const subcategoria = await
