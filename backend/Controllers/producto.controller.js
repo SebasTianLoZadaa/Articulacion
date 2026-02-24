@@ -64,45 +64,40 @@ const getProductos = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('error en getSubcategorias:', error);
+        console.error('error en getProductos:', error);
         res.status (500).json({
             success: false,
-            message: 'error al obtener subcategorias', error: error.message
+            message: 'error al obtener productos', error: error.message
         })
     }
 };
 
 /**
- * obtener las subcategorias por id
- * GET /api/subcategorias/:id
+ * obtener los productos por id
+ * GET /api/productos/:id
  *
  * @param {Object} req request express
  * @param {Object} res response express
  */
 
-const getSubcategoriasById = async (req, res) => {
+const getProductosById = async (req, res) => {
     try {
         const {id} = req.params;
 
-        //buscar subcategorias con categoria y contar productos
-        const subcategoria = await subcategoria.findByPk(id, {
+        //buscar productos por subcategoria y conteo de producto
+        const producto = await producto.findByPk(id, {
             include: [{
-                model: categoria,
-                as: 'categorias',
+                model: subcategoria,
+                as: 'subcategorias',
                 attributes: ['id', 'nombre', 'activo']
-            },
-            {
-                model: producto,
-                as: 'productos',
-                attributes: ['id']
             }]
         });
 
         //filtrar por estado activo si es especifico
-        if (!subcategoria) {
+        if (!producto) {
             return res.status(404).json({
                 success: false,
-                message: 'subcategoria no encontrada'
+                message: 'producto no encontrado'
             });
         }
 
