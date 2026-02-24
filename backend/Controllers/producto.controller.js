@@ -1,6 +1,6 @@
 /**
- * controlador de subcategorias
- * maneja las operaciones crud y activar y desactivar subcategorias
+ * controlador de productos
+ * maneja las operaciones crud y activar y desactivar productos
  * solo accesible por admins
  */
 
@@ -14,9 +14,9 @@ const Producto = require('../models/Producto');
 
 
 /**
- * obtener todas las subcategorias
+ * obtener todas los productos
  * query params:
- * categoriaId: Id de la categoria para filtrar por categoria
+ * subcategoriaId: Id de la categoria para filtrar por categoria
  * activo true/false (filtrar por estado)
  * incluir catrgoria true/false (incluir categoria relacionada)
  *
@@ -24,9 +24,9 @@ const Producto = require('../models/Producto');
  * @param {Object} res response express
  */
 
-const getSubcategorias = async (req, res) => {
+const getProductos = async (req, res) => {
     try {
-        const {categoriaId, activo, incluirCategoria} = req.query;
+        const {subcategoriaId, activo, incluirSubcategoria} = req.query;
 
         //opciones de consulta
         const opciones = {
@@ -35,31 +35,31 @@ const getSubcategorias = async (req, res) => {
 
         //filtros
         const where = {};
-        if (categoriaId) where.categoriaId = categoriaId;
+        if (subcategoriaId) where.subcategoriaId = subcategoriaId;
         if (activo !== undefined) where.activo = activo === 'true';
 
         if (Object.keys(where).length > 0) {
             opciones.where = where;
         }
 
-        //incluir categoria si se solicita
-        if (incluirCategoria === 'true') {
+        //incluir subcategoria si se solicita
+        if (incluirSubcategoria === 'true') {
             opciones.include = [{
-                model: Categoria,
-                as: 'categoria', // campo del alias para la relacion
-                attributes: ['id', 'nombre', 'activo'] //campos a incluir de la categoria
+                model: SubCategoria,
+                as: 'subcategoria', // campo del alias para la relacion
+                attributes: ['id', 'nombre', 'activo'] //campos a incluir de la subcategoria
             }]
         }
 
-        //obtener subcategoria
-        const subcategorias = await subcategoria.findAll (opciones);
+        //obtener producto
+        const productos = await producto.findAll (opciones);
 
         //respuesta exitosa
         res.json({
             success: true,
-            count: subcategorias.length,
+            count: productos.length,
             data: {
-                subcategorias
+                productos
             }
         });
 
