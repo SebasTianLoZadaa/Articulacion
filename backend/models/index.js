@@ -8,8 +8,8 @@
 
 const Usuario = require ('./Usuario');
 const Categoria = require ('./Categoria');
-const Subcategoria = require ('./Subcategoria');
-const Producto = require ('./Producto');
+const Subcategoria = require ('./subcategoria');
+const Producto = require ('./producto');
 const Carrito = require ('./Carrito');
 const Pedido = require ('./Pedido');
 const DetallePedido = require ('./DetallePedido');

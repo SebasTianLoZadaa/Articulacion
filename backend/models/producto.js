@@ -14,7 +14,7 @@ const { type } = require('os');
 /**
  * definir el modelo de producto
  */
-const Producto = sequelize.define('Producto', {
+const producto = sequelize.define('producto', {
     //campos de la tabla
     //id identificador unico (primary key)
     id: {

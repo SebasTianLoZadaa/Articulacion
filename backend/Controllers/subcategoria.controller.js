@@ -10,7 +10,7 @@
 
 const subcategoria = require('../models/subcategoria');
 const Categoria = require('../models/Categoria');
-const Producto = require('../models/Producto');
+const Producto = require('../models/producto');
 
 /**
  * obtener todas las subcategorias

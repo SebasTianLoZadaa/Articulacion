@@ -153,7 +153,7 @@ const Carrito = sequelize.define('Carrito', {
              */
 
              beforeCreate: async (itemCatrrito, options) => {
-                const Categoria = require('./Producto');
+                const Categoria = require('./producto');
 
                 //buscar producto
                 const producto = await Producto.findByPk(itemCarrito.productoId);
@@ -185,7 +185,7 @@ const Carrito = sequelize.define('Carrito', {
             BeforeUpdate: async (itemCarrito, options) => {
                 //verificar si el campo activo se cambio
                 if (itemCarrito.changed('cantidad')) {
-                    const Producto = require('./Producto');
+                    const Producto = require('./producto');
                     const producto = await Producto.findByPk(itemCarrito.productoId);
 
                     if (!producto) {
@@ -220,7 +220,7 @@ Carrito.prototype.calcularSubtotal = async function() {
  */
 
 Carrito.prototype.actualizarCantidad = async function(nuevaCantidad) {
-    const Producto = require('./Producto');
+    const Producto = require('./producto');
     const producto = await Producto.findByPk(this.productoId);
 
     if (!producto.hayStock(nuevaCantidad)) {
@@ -239,7 +239,7 @@ Carrito.prototype.actualizarCantidad = async function(nuevaCantidad) {
  * @returns {Promise<Array>} - Items del carrito con prodsuctos 
  */
 Carrito.obtenerCarritoUsuario = async function (usuarioId) {
-    const Produto = require('./Producto');
+    const Produto = require('./producto');
 
     return await Carrito.findAll({
         where: { usuarioId },

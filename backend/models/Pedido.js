@@ -295,7 +295,7 @@ Pedido.prototype.cancelar = async function(nuevaCantidad) {
 
     //Importar modelos
     const DetallePedido = require('./DetallePedido');
-    const Producto = require('./Producto');
+    const Producto = require('./producto');
 
     //Obtener detalles del pedido
     const detalles = await DetallePedido.findAll({
@@ -329,7 +329,7 @@ Pedido.prototype.cancelar = async function(nuevaCantidad) {
  */
 Pedido.prototype.obtenerDetalles = async function () {
     const DetallePedido = require('./DetallePedido');
-    const Producto = require('./Producto');
+    const Producto = require('./producto');
     
     
     return await DetallePedido.findAll({

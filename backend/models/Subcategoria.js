@@ -14,7 +14,7 @@ const {sequelize} = require('../config/database');
 /**
  * Definir el modelo Categoria
  */
-const Categoria = sequelize.define('Subcategoria', {
+const Subcategoria = sequelize.define('Subcategoria', {
     //Campos de la tabla
     //Id Indentificador unico (PRIMARY KEY)
     id: {
@@ -146,7 +146,7 @@ const Categoria = sequelize.define('Subcategoria', {
 
                     //Importar modelos (aqui para evitar dependencias circulares)
                     const { Subcategoria } = require('./subcategoria');
-                    const producto = require('./Producto');
+                    const producto = require('./producto');
                     
                     try {
                         //paso 1 desactivar las subcategorias de esta subcategoria
@@ -184,7 +184,7 @@ const Categoria = sequelize.define('Subcategoria', {
  * @returns {Promise<number>} - numero de subcategorias
  */
 Subcategoria.prototype.contarProductos = async function() {
-    const  Producto  = require('./Producto');
+    const  Producto  = require('./producto');
     return await Producto.count({ where: { subcategoriaId: this.id } });
 };
 /**
