@@ -303,7 +303,7 @@ const crearProducto =async (req, res) => {
 /**
  * actualizar producto
  * PUT /api/admin/producto/:id
- * body: {nombre, decripcion, categoriaId}
+ * body: {nombre, decripcion, stock, precio, categoriaId, subcategoriaId}
  * @param {Object} req request express
  * @param {Object} res response express
  */
