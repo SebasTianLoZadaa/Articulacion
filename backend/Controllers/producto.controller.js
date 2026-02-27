@@ -526,53 +526,38 @@ const toggleProducto = async (req, res) => {
 };
 
 /**
- * eliminar subcategoria
- * DELETE /api/admin/subcategorias/:id
- * Solo permite eliminar si no tiene productos relacionados
+ * eliminar producto
+ * DELETE /api/admin/productos/:id
  * @param {Object} req request express
  * @param {Object} res request express
  */
-const eliminarSubategoria = async (req, res) => {
+const eliminarProducto = async (req, res) => {
     try {
         const {id} = req.params;
 
-        //buscar subcategoria
-        const subcategoria = await subcategoria.findByPk(id);
-            if (!subcategoria) {
+        //buscar producto
+        const Producto = await Producto.findByPk(id);
+            if (!Producto) {
                 return res.status(404).json({
                     success: false,
-                    message: 'Subcategoria no encontrada'
+                    message: 'Prodcuto no encontrada'
                 });
             }
 
-            //validacion verificar que no tenga productos
-            const productos = await producto.count({
-                where: {subcategoriaId: id}
-            });
-
-            if (productos > 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: `no se puede eliminar la subcategoria porque tiene ${productos} productos asociados usa PATCH/api/admin/subcategorias/:id
-                    togle para desactivarla en lugar de eliminar
-`
-                });
-            }
-
-            //eliminar subcategoria
-            await subcategoria.destroy();
+            //eliminar producto
+            await producto.destroy();
 
             //respuesta exitosa
             res.json({
                 success: true,
-                message: 'subcategoria eliminada exitosamente'
+                message: 'producto eliminado exitosamente'
             });
 
     } catch (error) {
-        console.error('error al eilminar la subcategoria', error);
+        console.error('error al eilminar el producto', error);
         res.status(500).json({
             success: false,
-            message: 'error al eliminar la subcategoria',
+            message: 'error al eliminar el producto',
             error: error.message
         });
     }
