@@ -14,7 +14,7 @@ const { type } = require('os');
 /**
  * definir el modelo de producto
  */
-const producto = sequelize.define('producto', {
+const producto = sequelize.define('Producto', {
     //campos de la tabla
     //id identificador unico (primary key)
     id: {
@@ -253,4 +253,4 @@ producto.prototype.reducirStock = async function (cantidad) {
 }
 
 //exportar modelo Producto
-module.exports = Producto; 
+module.exports = producto
