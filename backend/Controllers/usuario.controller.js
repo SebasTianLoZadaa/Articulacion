@@ -202,77 +202,67 @@ const crearUsuario = async (req, res) => {
 };
 
 /**
- * Actualizar categoria
- * PUT /api/admin/categorias/:id
- * Body: {nombre, descripcion }
+ * Actualizar usuario
+ * PUT /api/admin/usuarios/:id
+ * Body: {nombre, apellido, email, password, rol, telefono, direccion }
  * @param {Object} req request Express
  * @param {Object} res response Express
  */
 
-const actualizarCategoria = async (req, res) => {
+const actualizarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre, descripcion} = req.body;
+        const { nombre, apellido, email, password, rol, telefono, direccion} = req.body;
 
-        //Buscar categoria
-        const categoria = await Categoria.findByPk(id);
+        //Buscar usuario
+        const usuario = await Usuario.findByPk(id);
 
-        if(!categoria) {
+        if(!usuario) {
             return res.status(404).json({
                 success: false,
-                message: 'Categoria no encontrada'
+                message: 'Usuario no encontrado'
             });
         }
 
-        //Validacion 1 si se cambia el nombre verificar que no exista
-        if (nombre && nombre !== categoria.nombre) {
-            const categoriaConMisNombre = await
-            Categoria.findOne({where: {nombre}
-            });
-
-            if(categoriaConMisNombre) {
+        //Validar rol si se proporciona
+        if (rol && ['cliente', 'administrador'].includes(rol)) {
                 return res.status(400).json({
                     succes: false,
-                    message: `Ya existe una categoria con el nombre "${nombre}"`
+                    message: 'rol invalido'
                 });
             }
-        }
 
         //Actualizar campos
-        if (nombre !== undefined) categoria.nombre = nombre;
-        if (descripcion !== undefined) categoria.descripcion = descripcion;
-        if (activo !== undefined) categoria.activo = activo;
+        if (nombre !== undefined) usuario.nombre = nombre;
+        if (apellido !== undefined) usuario.apellido = apellido;
+        if (email !== undefined) usuario.email = email;
+        if (direccion !== undefined) usuario.direccion = direccion;
+        if (rol !== undefined) usuario.rol = rol;
+
+    
 
         //guardar cambios
-        await categoria.save();
+        await usuario.save();
 
         //Respuesta exitosa
         res.json({
             succes: true,
-            message: 'Categoria actualizada exitosamente',
+            message: 'Usuario actualizado exitosamente',
             data: {
-                categoria
+                usuario: usuario.toJson()
             }
         });
 
     } catch (error) {
-        console.error('Error en actualizarCategoria:', error);
-
-        if (error.name === 'SequelizeValidationError') {
-            return res.status(400).json ({
+        console.error('Error en actualizarUsuario:', error);
+            return res.status(500).json ({
                 succes: false,
-                message: 'Error de validacion',
-                errors: error.errors.map(e => e. message)
+                message: 'Error al actualizar usuario',
+                errors: error.message
             });
         }
+    };
 
-        res.status(500).json({
-            succes: false,
-            message: 'Error al actualizar categoria',
-            error: error.message
-        });
-    }
-};
 
 /**
  * Activar/Desactivar Categoria
