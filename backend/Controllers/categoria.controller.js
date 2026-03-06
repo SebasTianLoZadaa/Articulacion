@@ -337,7 +337,7 @@ const eliminarCategoria = async (req, res) =>{
         const {id} = req.params;
 
         //Buscar categoria
-        const caegoria = await Categoria.findByPk(id);
+        const categoria = await Categoria.findByPk(id);
 
             if(!categoria) {
                 return res.status(404).json({
