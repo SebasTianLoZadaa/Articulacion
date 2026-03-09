@@ -103,22 +103,22 @@ router.get('/productos/:id', productoController.eliminarProducto);
 router.get('/usuarios', usuarioController.getUsuarios);
 
 // get /api/admin/categorias
-router.get('/categorias/:id', categoriaController.getCategoriasById);
+router.get('/usuarios/:id', usuarioController.getUsuariosById);
 
 // get /api/admin/categorias/:id/stats
-router.get('/categorias:id/stats', categoriaController.getEstadisticasCategoria);
+router.get('/usuarios:id/stats', usuarioController.getEstadisticasUsuarios);
 
 // POST /api/admin/categorias
-router.post('/categorias', categoriaController.crearCategoria);
+router.post('/usuarios', usuarioController.crearUsuario);
 
 // PUT /api/admin/categorias
-router.put('/categorias', categoriaController.actualizarCategoria);
+router.put('/usuarios', usuarioController.actualizarUsuario);
 
-// patch /api/admin/categorias:id / toggle desactivar o activar categoria
-router.patch('/categorias', categoriaController.toggleCategoria);
+// patch /api/admin/usuario:id / toggle desactivar o activar usuario
+router.patch('/usuarios', usuarioController.toggleUsuario);
 
-// delete /api/admin/categorias
-router.get('/categorias/:id', categoriaController.eliminarCategoria); 
+// delete /api/admin/usuario
+router.get('/usuarios/:id', usuarioController.eliminarUsuario); 
 
 
 
