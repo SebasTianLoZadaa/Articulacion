@@ -31,7 +31,7 @@ router.use(verificarAuth, esAdminOAuxiliar);
 // get /api/admin/categorias
 router.get('/categorias', categoriaController.getCategorias);
 
-// get /api/admin/categorias
+// get /api/admin/categorias/:id
 router.get('/categorias/:id', categoriaController.getCategoriasById);
 
 // get /api/admin/categorias/:id/stats
@@ -47,7 +47,7 @@ router.put('/categorias', categoriaController.actualizarCategoria);
 router.patch('/categorias', categoriaController.toggleCategoria);
 
 // delete /api/admin/categorias
-router.get('/categorias/:id', categoriaController.eliminarCategoria);
+router.delete('/categorias/:id', categoriaController.eliminarCategoria);
 
 
 
@@ -71,7 +71,7 @@ router.put('/subcategorias', subcategoriaController.actualizarSubcategoria);
 router.patch('/subcategorias', subcategoriaController.toggleSubcategoria);
 
 // delete /api/admin/subcategorias
-router.get('/subcategorias/:id', subcategoriaController.eliminarSubcategoria);
+router.delete('/subcategorias/:id', subcategoriaController.eliminarSubcategoria);
 
 
 //Rutas de producto
@@ -94,7 +94,7 @@ router.put('/productos', productoController.actualizarProducto);
 router.patch('/productos', productoController.toggleProducto);
 
 // delete /api/admin/productos/:id
-router.get('/productos/:id', productoController.eliminarProducto);
+router.delete('/productos/:id', productoController.eliminarProducto);
 
 
 
@@ -120,7 +120,7 @@ router.put('/usuarios/:id', soloAdministrador, usuarioController.actualizarUsuar
 router.patch('/usuarios/:id/toggle', soloAdministrador, usuarioController.toggleUsuario);
 
 // delete /api/admin/usuario
-router.get('/usuarios/:id', soloAdministrador, usuarioController.eliminarUsuario);
+router.delete('/usuarios/:id', soloAdministrador, usuarioController.eliminarUsuario);
 
 
 //Rutas de pedidos
