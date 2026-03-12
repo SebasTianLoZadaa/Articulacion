@@ -1,7 +1,7 @@
 /**
  * MODELO USUARIO
  * define la tabla usuario en la base de datos
- * Almacena la informacion de los usuarios del sistema 
+ * Almacena la informacion de los usuarios del sistema
  */
 
 
@@ -13,7 +13,7 @@ const bcrypt = require('bcrypt');
 
 
 //importar instancia de sequelize
-const { sequelize } = require('../config/database');
+const { sequelize } = require('../config/database'); //sequelize = interactuar con la base de datos
 
 
 
@@ -147,7 +147,7 @@ const Usuario = sequelize.define('Usuario', {
             withPassword: {
                 attributes: {} // incluir todos los atributos
             }
-        }, 
+        },
         /**
          * hooks funciones que se ejecutan en momentos especificos
          */

@@ -15,7 +15,7 @@ const {sequelize} = require('../config/database');
  * Definir el modelo Carrito
  */
 const Carrito = sequelize.define('Carrito', {
-    //Campos de la tabla 
+    //Campos de la tabla
     //Id Indentificador unico (PRIMARY KEY)
     id: {
         type: DataTypes.INTEGER,
@@ -26,7 +26,7 @@ const Carrito = sequelize.define('Carrito', {
     },
 
 
-    // UsuarioId ID del usuario dueño del carrito 
+    // UsuarioId ID del usuario dueño del carrito
     usuarioId: {
         type: DataTypes.INTEGER,
         allowNull: false,

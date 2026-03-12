@@ -143,7 +143,7 @@ const crearUsuario = async (req, res) => {
             });
         }
 
-        //Validar rol 
+        //Validar rol
         if (!['cliente', 'auxiliar', 'administrador'].includes(rol)) {
             return res.status(400).json(400).json({
                 success: false,

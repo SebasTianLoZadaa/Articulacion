@@ -86,7 +86,7 @@ const DetallePedido = sequelize.define('DetallePedido', {
             key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT', // no se puede eliminar productos en pedidos asociados con pedidos
+        onDelete: 'RESTRICT', // no se puede eliminar productos asociados con pedidos
         validate: {
             notNull: {
                 msg: 'Debe especificar su producto'
@@ -114,7 +114,7 @@ const DetallePedido = sequelize.define('DetallePedido', {
 
     /**
      * Precio Unitario del producto al momento del pedido
-     * se guarda para mantener el historial aunque el producto cambie de precio 
+     * se guarda para mantener el historial aunque el producto cambie de precio
      */
     precioUnitario: {
         type: DataTypes.DECIMAL(10, 2),
@@ -179,7 +179,7 @@ const DetallePedido = sequelize.define('DetallePedido', {
 
             /**
              *beforeUpdate. se ejecuta antes de actualizar detalle de pedido
-             *recalcula el subtotal si se actualiza la cantidad o el precio 
+             *recalcula el subtotal si se actualiza la cantidad o el precio
              */
             BeforeUpdate:  (detalle) => {
                 if (detalle.changed('precioUnitario') || detalle.changed('cantidad')) {
@@ -193,7 +193,7 @@ const DetallePedido = sequelize.define('DetallePedido', {
 // METODOS DE INSTANCIA
 
 /**
- * Metodo para calcular el subtotal 
+ * Metodo para calcular el subtotal
  *
  * @returns {number} - Subtotal calculado
  */

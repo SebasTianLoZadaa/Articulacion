@@ -19,9 +19,9 @@ const { upload } = require ('../config/multer');
 //importar controladores
 
 const categoriaController = require ('../controllers/categoria.controller');
-const subcategoriaController = require ('../controllers/subcategoria.controller');
+const subcategoriaController = require ('../Controllers/subcategoria.controller');
 const productoController = require ('../controllers/producto.controller');
-const usuarioController = require ('../controllers/usuario.controller');
+const usuarioController = require ('../Controllers/usuario.controller');
 const pedidoController = require ('../controllers/pedido.controller');
 
 // restricciones

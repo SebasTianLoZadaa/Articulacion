@@ -6,9 +6,7 @@
 
 // importar funciones de JWT
 const jwt ={  verifyToken, extractToken } = require ( '../config/jwt');
-
-const { subscribe } = require('diagnostics_channel');
-// importar modelo de usuario 
+// importar modelo de usuario
 const Usuario = require('../models/Usuario');
 const { extractToken } = require('../config/jwt');
 
@@ -43,7 +41,7 @@ const verificarAuth = async (req , res, next) => {
     let decoded; //funcion para decodificar el token
 
     try {
-        decoded = verificarToken(token);
+        decoded = verifyToken(token);
     } catch (error) {
         return res.status(401).json ({
             success: false,
@@ -61,8 +59,8 @@ const verificarAuth = async (req , res, next) => {
         return res.status(401).json ({
             success: false,
             message: 'Usuario no encontrado'
-            });
-        }
+        });
+    }
 
         // paso 4 verificar que el usuario este activo
         if (!usuario.activo) {

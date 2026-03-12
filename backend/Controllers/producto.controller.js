@@ -32,7 +32,7 @@ const fs = require('fs');
 const getProductos = async (req, res) => {
     try {
         const {categoriaId,
-            subcategoriaId, 
+            subcategoriaId,
             activo,
             conStock,
             buscar,
@@ -47,6 +47,18 @@ const getProductos = async (req, res) => {
         subcategoriaId;
         if (activo !== undefined) where.activo = activo === 'true';
         if (conStock === 'true') where.stock = {[require('sequelize').Op.gt]: 0};
+
+
+        if (buscar) {
+            const {op} = require('sequelize');
+            //Op.or busca por nombre o descripcion
+            //Op.like equivale a un like en sql con comodines para buscar coincidencias parciales
+
+            where[Op.or] = [
+                {nombre: {[Op.like]: `%${buscar}%`}},
+                {descripcion: {[Op.like]: `%${buscar}%`}}
+            ];
+        }
 
         //paginacion
         const offset = (parseInt(pagina) -1) * parseInt(limite);
@@ -130,7 +142,7 @@ const getProductosById = async (req, res) => {
                 attributes: ['id', 'nombre', 'activo']
             }]
         });
-           
+        
 
         //filtrar por estado activo si es especifico
         if (!producto) {

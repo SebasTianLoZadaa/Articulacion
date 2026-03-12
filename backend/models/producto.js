@@ -1,5 +1,5 @@
 /**
- * modelo producto
+ * Modelo producto
  * define la tabla producto en la base de datos
  * almacena los productos
  */
@@ -8,8 +8,6 @@ const { DataTypes } = require('sequelize');
 
 //importar instancia de sequelize
 const { sequelize } = require('../config/database');
-const { table } = require('console');
-const { type } = require('os');
 
 /**
  * definir el modelo de producto
@@ -21,7 +19,7 @@ const producto = sequelize.define('Producto', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false
+        allowNull: false //no permite que sea nulo
     },
 
     nombre: {
@@ -32,8 +30,8 @@ const producto = sequelize.define('Producto', {
                 msg: 'El nombre del producto no puede estar vacio'
             },
             len:{
-                args: [2,200],
-                msg: 'el nombre debe tener entre 2 y 200 caracteres'
+                args: [3,200],
+                msg: 'el nombre debe tener entre 3 y 200 caracteres'
             }
         }
     },
@@ -43,19 +41,19 @@ const producto = sequelize.define('Producto', {
      */
     descripcion: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true //puede estar vacio no obligatorio
     },
 
     //Precio del producto
     precio:{
-        type: DataTypes.DECIMAL(10,2), //hasta 99,999,
+        type: DataTypes.DECIMAL(10,2), //hasta 99,999,999
         allowNull: false,
         validate: {
             isDecimal: {
                 msg: 'El precio debe ser un numero decimal valido'
             },
             min: {
-                args: [0],
+                args: [0], //condicion o argumento regional
                 msg: 'El precio no puede ser negativo'
             }
         }
@@ -65,7 +63,7 @@ const producto = sequelize.define('Producto', {
     stock:{
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue:0,
+        defaultValue: 0,
         validate: {
             isInt: {
                 msg: 'El stock debe ser un numero entero valido'
@@ -84,8 +82,8 @@ const producto = sequelize.define('Producto', {
      * la ruta seria uploads/coca-cola-producto.jpg
      */
     imagen: {
-        type: DataTypes.STRING(255),
-        allowNull: true,
+        type: DataTypes.STRING(255), //se guarda en strig porque es la ruta de la imagen
+        allowNull: true, //la imagen puede ser opcional
         validate: {
             is: {
                 args: /\.(jpg|jpeg|png|gif)$/i,
@@ -106,7 +104,7 @@ const producto = sequelize.define('Producto', {
             model: 'categorias', //nombre de la tabla categoria
             key: 'id' //camo de la tabla relacionada
         },
-        onUpdate: 'CASCADE', //si se actualiza el id, actualizar aca tambien
+        onUpdate: 'CASCADE', //si se actualiza el id, actualizar aqui tambien
         onDelete: 'CASCADE', //si se elimina la categoria, eliminar esta subcategoria tambien
         validate: {
             notNull: {
@@ -114,6 +112,11 @@ const producto = sequelize.define('Producto', {
             }
         }
     },
+
+    /**
+     * subcategoriaId - id de la subcategoria a la que pertenece foreign key
+     * esta es la relacion con la tabla subcategoria
+     */
 
     subcategoriaId: {
         type: DataTypes.INTEGER,
@@ -137,14 +140,14 @@ const producto = sequelize.define('Producto', {
      */
     activo: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: false, //no puede estar vacio
         defaultValue: true
     }
 
 }, {
     //opciones del modelo
 
-    tableName: 'subcategorias',
+    tableName: 'productos',
     timestamps: true, //crea campos createdAt y updatedAt
 
     /**
@@ -161,7 +164,7 @@ const producto = sequelize.define('Producto', {
         },
         {
             //indice para buscar productos activos
-            fields: ['Activos']
+            fields: ['activo']
         },
         {
             //indice para buscar productos por nombre
@@ -182,8 +185,7 @@ const producto = sequelize.define('Producto', {
             const subcategoria = require('./subcategoria');
 
             //Buscar subcategoria padre
-            const subcategoria = await
-subcategoria.findByPk(producto.subcategoriaId);
+            const subcategoria = await subcategoria.findByPk(producto.subcategoriaId);
             if (!subcategoria) {
                 throw new Error('la subcategoria seleccionada no existe');
             }
@@ -203,7 +205,7 @@ subcategoria.findByPk(producto.subcategoriaId);
             }
 
             //Validar que la subcategoria pretenezca a una categoria
-            if (subcategoria.categoriaId !==producto.categoriaId) {
+            if (subcategoria.categoriaId !== producto.categoriaId) {
                 throw new Error ('La subcategoria no perteece a la categoria seleccionada');
             }
         },
@@ -215,9 +217,11 @@ subcategoria.findByPk(producto.subcategoriaId);
 
         beforeDestroy: async (producto) => {
             if (producto.imagen) {
-                const {deletefile} = require('../config/multer');
+                const {deletefile} = require('../config/multer'); //multer genera la relacion y lo guarda en la carpeta uploads
+
                 //Intenta eliminar la imagen del servidor
                 const eliminado = await require('../config/multer');
+
                 if (eliminado) {
                     console.log (`imagen eliminada: ${producto.imagen}`);
                 }
@@ -225,6 +229,19 @@ subcategoria.findByPk(producto.subcategoriaId);
         }
     }
 });
+
+/**
+ * metodo para obtener la url completa de la imagen
+ */
+
+producto.prototype.obtemerUrlImagen = function() {
+    if (this.imagen) {
+        return null;
+    }
+
+    const baseUrl = process.env.FRONTEND_URL || 'https://localhost:50000';
+    return `${baseUrl}/uploads/${this.imagen}`;
+}
 
 /**
  * metodo para verificar si hay stock disponible
@@ -250,7 +267,19 @@ producto.prototype.reducirStock = async function (cantidad) {
     this.stock -= cantidad;
     return await this.save();
 
-}
+};
+
+/**
+ * Metodo para aumentar el stock
+ *  Util al cancelar una venta o recibir inventario
+ * @param {number} cantidad - a aumentar
+ * @returns {promise<Producto>} producto actualizado
+ */
+
+Producto.prototype.aumentarStock = async function(cantidad) {
+    this.stock += cantidad;
+    return await this.save()
+};
 
 //exportar modelo Producto
 module.exports = producto
