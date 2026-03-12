@@ -63,13 +63,13 @@ app.use(express.urlencoded({ extended: true}));
  * servir archivos estaticos imagenes desde la carpeta raiz
  */
 
-app.user('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //middleware para login de peticiones
 // Muestra en consola cada peticion que llega el servidor
 
 if (process.env.NODE_ENV === 'development') {
-    app.user((req, res, next) => {
+    app.use((req, res, next) => {
         console.log(`ok ${req.method} ${req.path}`);
         next();
 
@@ -106,13 +106,13 @@ app.get('/api/health' , (req, res) => {
 // incluye registro login, perfil
 
 const authRoutes = require('./backend/routes/auth.routes');
-app.use('/api/auth', aunthRoutes);
+app.use('/api/auth', authRoutes);
 
 //Rutas del administrador
 //requieren autenticacion y rol de administrador
 
 const adminRoutes = require ('./routes/adminRoutes');
-app.use('api/admin/', adminRoutes);
+app.use('/api/admin/', adminRoutes);
 
 //rutas del cliente
 const clienteRoutes = require('./backend/routes/cliente.routes');
