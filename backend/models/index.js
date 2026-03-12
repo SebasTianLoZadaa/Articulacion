@@ -234,7 +234,7 @@ const initAssociations =  ( ) => {
 };
 
 
-// Exportar los modelos 
+// Exportar los modelos
 module.exports = {
     Usuario,
     Categoria,

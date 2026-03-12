@@ -34,8 +34,8 @@ const sequelize = new Sequelize (
         //Zona horaria
         timezone: '-05:00' , //Zona horaria de Colombia
 
-        //Opciones adicionales 
-        define: { 
+        //Opciones adicionales
+        define: {
             // Agrega los campos createdAt y updatedAt
             timestamps: true,
 
@@ -43,7 +43,7 @@ const sequelize = new Sequelize (
             underscored: false,
 
             //freezeTableName: true  usa el nombre del modelo tal cual para la tabla
-            freezeTableName: true 
+            freezeTableName: true
         }
         
     }

@@ -47,27 +47,27 @@ const Categoria = sequelize.define('Categoria', {
      *descripcion de la categoria
      */
 
-     descripcion: {
+    descripcion: {
         type: DataTypes.TEXT,
         allowNull: true, // puede ser nulo
-     },
+    },
 
-     /**
+    /**
       * activo estado de la categoria
       * si es false la categoria y todas sus subcategorias y productos se ocultan
       */
 
-     activo: {
+    activo: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true // por defecto la categoria esta activa
-     }
-     }, {
+    }
+    }, {
         //opciones del modelo
 
         tableName: 'categorias', // nombre de la tabla en la base de datos
         timestamps: true, // agrega campos createdAt y updatedAt
-     
+    
 
         /**
          * Hooks Acciones automaticas

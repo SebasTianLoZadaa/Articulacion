@@ -49,7 +49,7 @@ const Subcategoria = sequelize.define('Subcategoria', {
     descripcion: {
         type: DataTypes.TEXT,
         allowNull: true //puede ser nulo
-    }, 
+    },
 
     /**
      * Categoria - ID de la categoria a la ue pertenece (FOREIGN KEY)
@@ -95,14 +95,14 @@ const Subcategoria = sequelize.define('Subcategoria', {
         indexes: [
             {
                 //Indice para buscar subcategorias por categoria
-                fields : ['categoriaId'] 
+                fields : ['categoriaId']
             },
             {
                 //Indice compuesto: nombre unico por categoria
                 //permite que dos categorias diferesdntes tengan subcategorias con el mismo nombre
                 unique: true,
                 fields: ['nombre', 'categoriaId'],
-                name: 'nombre_categoria_unique' 
+                name: 'nombre_categoria_unique'
             }
         ],
 
@@ -113,7 +113,7 @@ const Subcategoria = sequelize.define('Subcategoria', {
         hooks:{
             /**
              *beforeCreate - se ejecuta antes de crear una subcategoria
-             *verifica que la categoria padre este activa 
+             *verifica que la categoria padre este activa
              */
 
             beforeCreate: async (subcategoria) => {

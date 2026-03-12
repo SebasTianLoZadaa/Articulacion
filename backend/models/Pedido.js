@@ -94,7 +94,7 @@ const Pedido = sequelize.define('Pedido', {
      * pendiente: pedido creado, esperando pago
      * pagado: pedido paado, en preparacion
      * enviado: pedido enviado al cliente
-     * cancelado: pedido cancelado 
+     * cancelado: pedido cancelado
      */
 
     estado: {
@@ -137,7 +137,7 @@ const Pedido = sequelize.define('Pedido', {
         allowNull: true
     },
 
-    //Fecha de pago 
+    //Fecha de pago
     fechaPago: {
         type: DataTypes.DATE,
         allowNull: true
@@ -233,9 +233,9 @@ const Pedido = sequelize.define('Pedido', {
                 }
                     //si el estado cambio a entregado, guardar fecha de entrega
 
-                    if (pedido.changed('estado') && pedido.estado === 'Entregado' && !pedido.fechaEntrega) { 
+                    if (pedido.changed('estado') && pedido.estado === 'Entregado' && !pedido.fechaEntrega) {
                         pedido.fechaEntrega = new Date();
-                        await pedido.save({hooks: false});  
+                        await pedido.save({hooks: false});
                     
                 }
                     

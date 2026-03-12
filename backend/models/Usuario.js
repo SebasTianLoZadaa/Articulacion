@@ -92,18 +92,18 @@ const Usuario = sequelize.define('Usuario', {
 
 //Telefono del usuario es opcional
     telefono: {
-        type: DataTypes.STRING(20), // tipo cadena de texto 
-        allowNull: true, // es opcional 
+        type: DataTypes.STRING(20), // tipo cadena de texto
+        allowNull: true, // es opcional
         validate: {
             is: {
-                args: /^[0-9+\-\s()]*$/, // solo numeros, espacios, guiones y parentesis 
+                args: /^[0-9+\-\s()]*$/, // solo numeros, espacios, guiones y parentesis
                 msg: 'El telefono solo puede contener numeros y caracteres validos'
             }
         }
     },
 
     /**
-     *direccion del usuario es opcional 
+     *direccion del usuario es opcional
      */
 
     direccion: {
@@ -137,7 +137,7 @@ const Usuario = sequelize.define('Usuario', {
 
         defaultScope:{
             /**
-             *por defecto excluir el password de todas las consultas 
+             *por defecto excluir el password de todas las consultas
              */
 
             attributes: { exclude: ['password'] }
@@ -145,36 +145,36 @@ const Usuario = sequelize.define('Usuario', {
         scopes: {
             // scope para incluir el password cuando sea necesario (ejemplo: login)
             withPassword: {
-                attributes: {} // incluir todos los atributos 
+                attributes: {} // incluir todos los atributos
             }
         }, 
         /**
-         * hooks funciones que se ejecutan en momentos especificos 
+         * hooks funciones que se ejecutan en momentos especificos
          */
         hooks: {
             /**
-             * beforeCreate se ejecuta antes de crear un usuario 
-             * Encripta la contraseña antes de guardarla en la base de datos 
+             * beforeCreate se ejecuta antes de crear un usuario
+             * Encripta la contraseña antes de guardarla en la base de datos
              */
 
             beforeCreate: async (usuario) => {
                 if (usuario.password) {
                     //genera un salt (semilla aleatoria) con factor de costo de 10
-                    const salt = await bcrypt.genSalt(10); 
-                    //Encriptar la contraseña con salt 
+                    const salt = await bcrypt.genSalt(10);
+                    //Encriptar la contraseña con salt
                     usuario.password = await bcrypt.hash(usuario.password, salt);
                 }
             },
 
 /**
  * beforeUpdate se ejecuta antes de actualizar un usuario
- * Encripta la contraseña si fue modificada 
+ * Encripta la contraseña si fue modificada
  */
 
             beforeUpdate: async (usuario) => {
-                //verificar si la contraseña fue modificada 
+                //verificar si la contraseña fue modificada
                 if (categoria.changed('password')) {
-                    const salt = await bcrypt.genSalt(10); 
+                    const salt = await bcrypt.genSalt(10);
                     usuario.password = await bcrypt.hash(usuario.password, salt);
                     
                 }
@@ -190,7 +190,7 @@ const Usuario = sequelize.define('Usuario', {
  * Metodo para comparar contraseñas
  * Compara una contraseña en texto plano con el hash guardado
  * @param {string} passwordIngresado contraseña en texto plano
- * @returns {Promise<boolean>} - true si las contraseñas coinciden, false si no 
+ * @returns {Promise<boolean>} - true si las contraseñas coinciden, false si no
  */
 Usuario.prototype.compararPassword = async function(passwordIngresado) {
     return await bcrypt.compare(passwordIngresado, this.password);
