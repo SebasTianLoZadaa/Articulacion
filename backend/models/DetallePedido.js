@@ -181,7 +181,7 @@ const DetallePedido = sequelize.define('DetallePedido', {
              *beforeUpdate. se ejecuta antes de actualizar detalle de pedido
              *recalcula el subtotal si se actualiza la cantidad o el precio
              */
-            BeforeUpdate:  (detalle) => {
+            beforeUpdate:  (detalle) => {
                 if (detalle.changed('precioUnitario') || detalle.changed('cantidad')) {
                     detalle.subtotal = parseFloat(detalle.precioUnitario) * detalle.cantidad;
                 }
@@ -209,7 +209,7 @@ DetallePedido.prototype.calcularSubtotal = async function() {
  * @returns {Promise<Array>} - Detalles del pedido creados
  */
 
-    DetallesPedido.prototype.crearDesdeCarrito = async function(pedidoId, itemsCarrito) {
+    DetallePedido.prototype.crearDesdeCarrito = async function(pedidoId, itemsCarrito) {
         const detalles = [];
         for (const item of itemsCarrito) {
             const detalle = await this.create({
@@ -228,7 +228,7 @@ DetallePedido.prototype.calcularSubtotal = async function() {
  * @param {number} usuarioId - ID del usuario
  * @returns {Promise<number>} - Total del pedido
  */
-DetallesPedido.calcularTotalPedido = async function (pedidoId) {
+DetallePedido.calcularTotalPedido = async function (pedidoId, itemsCarrito) {
     const detalles = await this.findAll({
         where: { pedidoId }
     });

@@ -5,10 +5,9 @@
  */
 
 // importar funciones de JWT
-const jwt ={  verifyToken, extractToken } = require ( '../config/jwt');
+const { verifyToken, extractToken } = require ('../config/jwt');
 // importar modelo de usuario
 const Usuario = require('../models/Usuario');
-const { extractToken } = require('../config/jwt');
 
 // middleware de autenticacion
 

@@ -9,7 +9,7 @@
 const jwt = require('jsonwebtoken');
 
 //Importar dotenv para acceder a las variables de entorno
-required('dotenv').config();
+require('dotenv').config();
 
 /**
  * Generar un token JWT para un usuario

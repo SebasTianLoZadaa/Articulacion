@@ -5,12 +5,11 @@
  */
 
 //Importar Modelos
-const Carrito = require('../models/Carrito');
+const Carrito = require('../models/carrito');
 const producto = require('../models/producto');
 const Categoria = require('../models/Categoria');
 const Subcategoria = require('../models/subcategoria');
 const { kMaxLength } = require('buffer');
-const producto = require('../models/producto');
 
 /**
  * obtener carrito del usuario autenticado

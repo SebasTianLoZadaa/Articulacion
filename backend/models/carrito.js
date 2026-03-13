@@ -152,7 +152,7 @@ const Carrito = sequelize.define('Carrito', {
              *verifica que este activo y tenga stock suficiente para agregarlo al carrito
              */
 
-             beforeCreate: async (itemCatrrito, options) => {
+            beforeCreate: async (itemCatrrito, options) => {
                 const Categoria = require('./producto');
 
                 //buscar producto
@@ -174,15 +174,15 @@ const Carrito = sequelize.define('Carrito', {
                 //Guardar el precio actual del producto
                 itemCarrito.precioUnitario = producto.precio;
 
-             },
+            },
 
-              /**
+            /**
              *beforeUpdate. se ejecuta antes de actualizar un carrito
              *valida que haya stock suficiente si se aumenta la cantidad 
              */
 
             
-            BeforeUpdate: async (itemCarrito, options) => {
+            beforeUpdate: async (itemCarrito, options) => {
                 //verificar si el campo activo se cambio
                 if (itemCarrito.changed('cantidad')) {
                     const Producto = require('./producto');

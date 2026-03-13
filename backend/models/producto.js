@@ -185,27 +185,27 @@ const producto = sequelize.define('Producto', {
             const subcategoria = require('./subcategoria');
 
             //Buscar subcategoria padre
-            const subcategoria = await subcategoria.findByPk(producto.subcategoriaId);
-            if (!subcategoria) {
+            const Subcategoria = await subcategoria.findByPk(producto.subcategoriaId);
+            if (!Subcategoria) {
                 throw new Error('la subcategoria seleccionada no existe');
             }
 
-            if (!subcategoria.activo) {
+            if (!Subcategoria.activo) {
                 throw new Error('no se puede crear un producto en una categoria inactiva');
             }
 
             //Buscar categoria padre
-            const categoria = await categoria.findByPk(producto.categoriaId);
-            if (!categoria) {
+            const Categoria = await categoria.findByPk(producto.categoriaId);
+            if (!Categoria) {
                 throw new Error('la categoria seleccionada no existe');
             }
 
-            if (!categoria.activo) {
+            if (!Categoria.activo) {
                 throw new Error('no se puede crear un producto en una categoria inactiva');
             }
 
             //Validar que la subcategoria pretenezca a una categoria
-            if (subcategoria.categoriaId !== producto.categoriaId) {
+            if (Subcategoria.categoriaId !== producto.categoriaId) {
                 throw new Error ('La subcategoria no perteece a la categoria seleccionada');
             }
         },
@@ -249,7 +249,7 @@ producto.prototype.obtemerUrlImagen = function() {
  * @param {number} cantidad - cantidad deseada
  * @returns {boolean} - true si hay stock suficiente false si no
  */
-producto.producto.hayStock = function(cantidad = 3) {
+producto.hayStock = function(cantidad = 3) {
     return this.stock >= cantidad;
 };
 
@@ -276,7 +276,7 @@ producto.prototype.reducirStock = async function (cantidad) {
  * @returns {promise<Producto>} producto actualizado
  */
 
-Producto.prototype.aumentarStock = async function(cantidad) {
+producto.prototype.aumentarStock = async function(cantidad) {
     this.stock += cantidad;
     return await this.save()
 };
