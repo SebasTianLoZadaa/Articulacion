@@ -166,14 +166,14 @@ const login = async (req , res) => {
         }
 
         // Generar token JWT con datos basicos del usuario
-        const token = generateToken({
+        const token = generarToken({
             id: usuario.id,
             email: usuario.email,
             rol: usuario.rol
         });
 
         // preparar respuesta sin password
-        const usuarioSinPassword = usuario.toJson ();
+        const usuarioSinPassword = usuario.toJSON();
         delete usuarioSinPassword.password;
 
         //respuesta exitosa

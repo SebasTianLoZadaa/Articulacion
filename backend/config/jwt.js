@@ -83,6 +83,8 @@ const extractToken = (authHeader) => {
 //Exportar las funciones para usarlas en otras partes del proyecto
 module.exports = {
     generateTokens,
+    // alias en español para mantener compatibilidad con controladores
+    generarToken: generateTokens,
     verifyToken,
     extractToken
 };

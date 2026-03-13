@@ -63,15 +63,13 @@ const getProductos = async (req, res) => {
         // filtro por rango de precio
         if (precioMin && precioMax) {
             where.precio = {};
-            if (precioMin) where.precio [Op.gte] =
-            parseFloat(precioMin);
-            if (precioMax) where.precio [Op.gte] =
-            parseFloat(precioMax);
+            if (precioMin) where.precio[Op.gte] = parseFloat(precioMin);
+            if (precioMax) where.precio[Op.lte] = parseFloat(precioMax);
         }
 
         //Ordenamiento
         let order;
-        switch (order) {
+        switch (orden) {
             case 'precio_asc' :
                 order = [['precio', 'ASC']];
                 break;
@@ -95,28 +93,24 @@ const getProductos = async (req, res) => {
 
         //consultar productos
 
-        const opciones = { count, rows: productos } = await
-        ProductofindAndCountAll({
+        const { count, rows: productos } = await Producto.findAndCountAll({
             where,
             include: [
                 {
                     model: Categoria,
                     as: 'categoria',
                     attributes: ['id', 'nombre'],
-                
                 },
-            
                 {
                     model: Subcategoria,
                     as: 'subcategoria',
                     attributes: ['id', 'nombre'],
-                    where : { activo: true}
-                },
+                    where: { activo: true }
+                }
             ],
             limit: parseInt(limite),
             offset,
-            order: [['nombre', 'ASC']]
-        
+            order: order || [['nombre', 'ASC']]
         });
 
 
@@ -238,7 +232,7 @@ const getCategorias = async (req, res) => {
             });
             return {
                 ...categoria.toJSON(),
-                totalproductos
+                totalProductos
             };
 
 
@@ -319,7 +313,7 @@ const getSubcategoriasPorCategoria = async (req, res) => {
             });
             return {
                 ...subcategoria.toJSON(),
-                totalproductos
+                totalProductos
             };
 
 
@@ -360,8 +354,9 @@ const getSubcategoriasPorCategoria = async (req, res) => {
 
 const getProductosDestacados = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const { Op } = require('sequelize');
+        const { limite = 12 } = req.query;
 
         //obtener productos mas recientes
         const productos = await Producto.findAll({

@@ -180,8 +180,11 @@ const startServer = async () => {
         // en desarrollo alter puede ser true para actualizar la estructura
         //en produccion debe ser false para no perder los datos
 
-        const AlterTables = process.env.NODE_ENV === 'development' ;
-        const dbSynced = await dbconfig.syncDataBase(false,alterTables);
+    // en desarrollo alter puede ser true para actualizar la estructura
+    // en produccion debe ser false para no perder los datos
+    const alterTables = process.env.NODE_ENV === 'development';
+    // Llamar a la función exportada correctamente (syncDatabase)
+    const dbSynced = await dbconfig.syncDatabase(false, alterTables);
 
         if (!dbSynced) {
             console.error(' X error al sincronizar la base de datos');
