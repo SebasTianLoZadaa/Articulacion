@@ -125,6 +125,7 @@ const crearPedido = async (req, res) => {
         //crear pedido
         const pedido = await Pedido.create({
             usuarioId: req.usuario.id,
+            nombre: `${req.usuario.nombre} ${req.usuario.apellido}`,
             total: totalPedido,
             estado: 'Pendiente',
             direccionEnvio,

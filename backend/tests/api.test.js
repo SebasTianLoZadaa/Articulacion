@@ -20,10 +20,73 @@ let pedidoId = 0;
 
 describe('🧪 TESTS DE API E-COMMERCE', () => {
 
-  // Limpiar usuario de prueba antes de empezar
+  // Limpiar usuario de prueba y sincronizar DB
   beforeAll(async () => {
-    const { Usuario } = require('../models');
+    const { sequelize } = require('../config/database');
+    await sequelize.sync({ force: true });
+    // const { runSeeders } = require('../seeders/adminSeeder');
+    // await runSeeders();
+    const { Usuario, Categoria, Subcategoria, Producto } = require('../models');
+    // Create admin
+    await Usuario.create({
+      nombre: 'Admin',
+      apellido: 'Test',
+      email: 'admin@ecommerce.com',
+      password: 'admin1234',
+      rol: 'administrador',
+      telefono: '3001234567',
+      direccion: 'Test',
+      activo: true
+    });
+    // Create auxiliar
+    await Usuario.create({
+      nombre: 'Auxiliar',
+      apellido: 'Test',
+      email: 'auxiliar@ecommerce.com',
+      password: 'aux123',
+      rol: 'auxiliar',
+      telefono: '3001234568',
+      direccion: 'Test',
+      activo: true
+    });
+    // Create cliente
+    await Usuario.create({
+      nombre: 'Cliente',
+      apellido: 'Test',
+      email: 'cliente1@ecommerce.com',
+      password: 'cliente1',
+      rol: 'cliente',
+      telefono: '3001234569',
+      direccion: 'Test',
+      activo: true
+    });
     await Usuario.destroy({ where: { email: 'test@test.com' } });
+
+    // Create categoria
+    const categoria = await Categoria.create({
+      nombre: 'Categoría Test',
+      descripcion: 'Descripción categoría test',
+      activo: true
+    });
+
+    // Create subcategoria
+    const subcategoria = await Subcategoria.create({
+      nombre: 'Subcategoría Test',
+      descripcion: 'Descripción subcategoría test',
+      categoriaId: categoria.id,
+      activo: true
+    });
+
+    // Create producto
+    await Producto.create({
+      nombre: 'Producto Test',
+      descripcion: 'Descripción producto test',
+      precio: 50000,
+      stock: 100,
+      categoriaId: categoria.id,
+      subcategoriaId: subcategoria.id,
+      activo: true
+    });
   });
 
   // ==========================================
