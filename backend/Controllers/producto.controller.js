@@ -638,7 +638,7 @@ const eliminarProducto = async (req, res) => {
 
 
             }
-            producto.stock = 
+            producto.stock = nuevoStock;
             await producto.save ();
 
             res.json ({
