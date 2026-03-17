@@ -28,8 +28,8 @@ router.get('/catalogo/productos', catalogoController.getProductos);
 // get /api/catalogo/productos/:id
 router.get('/catalogo/productos/:id', catalogoController.getProductosById);
 
-// get /api/admin/catalogo/categorias
-router.get('/catalogo/categorias:id/stats', catalogoController.getCategorias);
+// get /api/catalogo/categorias
+router.get('/catalogo/categorias', catalogoController.getCategorias);
 
 // get /api/admin/categorias/:id/subcategorias
 router.get('/catalogo/categorias/:id/subcategorias', catalogoController.getSubcategoriasPorCategoria);

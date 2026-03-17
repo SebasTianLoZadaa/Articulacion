@@ -249,7 +249,7 @@ producto.prototype.obtemerUrlImagen = function() {
  * @param {number} cantidad - cantidad deseada
  * @returns {boolean} - true si hay stock suficiente false si no
  */
-producto.hayStock = function(cantidad = 3) {
+producto.prototype.hayStock = function(cantidad = 3) {
     return this.stock >= cantidad;
 };
 
@@ -261,7 +261,7 @@ producto.hayStock = function(cantidad = 3) {
  */
 
 producto.prototype.reducirStock = async function (cantidad) {
-    if (this.hayStock(cantidad)) {
+    if (!this.hayStock(cantidad)) {
         throw new Error('Stock insuficiente');
     }
     this.stock -= cantidad;

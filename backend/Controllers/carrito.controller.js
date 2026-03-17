@@ -6,7 +6,7 @@
 
 //Importar Modelos
 const Carrito = require('../models/Carrito');
-const producto = require('../models/producto');
+const Producto = require('../models/producto');
 const Categoria = require('../models/Categoria');
 const Subcategoria = require('../models/subcategoria');
 const { kMaxLength } = require('buffer');
@@ -25,7 +25,7 @@ const getCarrito = async (req, res ) => {
             where: { usuarioId: req.usuario.id },
             include: [
                 {
-                    model: producto,
+                    model: Producto,
                     as: 'producto', //nombre que genera para traer la informacion
                     attributes: ['id', 'nombre', 'descripcion', 'precio', 'stock', 'imagen', 'activo'],
                     include: [
@@ -60,7 +60,7 @@ const getCarrito = async (req, res ) => {
                 resumen: {
                 totalItem: itemsCarrito.length,
                 cantidadTotal: itemsCarrito.reduce((sum, item) => sum + item.cantidad, 0),
-                total: total.tofixed(2)
+                total: total.toFixed(2)
             }
             }
         });
@@ -107,16 +107,16 @@ const agregarAlCarrito = async (req, res) => {
     
 
     //validacion 3: prodcto existe y esta activo
-    const Producto = await producto.findByPk(productoId);
+    const productoEncontrado = await Producto.findByPk(productoId);
 
-    if (!Producto){
+    if (!productoEncontrado){
         return res.status(400).json ({
             success: false,
             message: 'Producto no encontrado'
         });
     }
     
-    if (!Producto.activo) {
+    if (!productoEncontrado.activo) {
         return res.status(400).json({
             success: false,
             message: 'Producto no disponible'
@@ -138,10 +138,10 @@ const agregarAlCarrito = async (req, res) => {
         + cantidadNum;
 
         // validar stock disponible
-        if (nuevaCantidad > Producto.stock) {
+        if (nuevaCantidad > productoEncontrado.stock) {
             return res.status (400).json ({
                 success: false,
-                message: `Stock insuficiente. disponible : ${Producto.stock}, En carrito: ${itemExistente.cantidad}`
+                message: `Stock insuficiente. disponible : ${productoEncontrado.stock}, En carrito: ${itemExistente.cantidad}`
             });
         }
 
@@ -168,10 +168,10 @@ const agregarAlCarrito = async (req, res) => {
     }
 
     // Validacion 5 stock disponible
-    if (cantidadNUm > Producto.stock) {
+    if (cantidadNum > productoEncontrado.stock) {
         return res.status(400).json ({
             success: false,
-            message: `Stock insuficiente Disponble: ${Producto.stock}
+            message: `Stock insuficiente Disponble: ${productoEncontrado.stock}
             `
         });
     }
@@ -180,8 +180,8 @@ const agregarAlCarrito = async (req, res) => {
     const nuevoItem = await Carrito.create({  //crear un nuevo carrito
         usuarioId: req.usuario.id,
         productoId,
-        cantidad: cantidadNUm,
-        PrecioUnitario: Producto.precio
+        cantidad: cantidadNum,
+        precioUnitario: productoEncontrado.precio
     });
 
     // Recargar con producto

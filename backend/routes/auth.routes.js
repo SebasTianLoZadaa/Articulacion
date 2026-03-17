@@ -15,7 +15,6 @@ const {
     getMe,
     updateMe,
     changePassword,
-    registrar,
 } = require ('../Controllers/auth.controller');
 
 //importar middleware
@@ -23,7 +22,7 @@ const  {verificarAuth} = require ('../middleware/auth');
 
 //Rutas publicas
 
-router.post('/registrar', registrar);
+router.post('/register', register);
 
 router.post('/login', login);
 
@@ -31,9 +30,9 @@ router.post('/login', login);
 
 router.get('/me', verificarAuth, getMe);
 
-router.get('/me', verificarAuth, updateMe);
+router.put('/me', verificarAuth, updateMe);
 
-router.get('/change.password', verificarAuth, changePassword);
+router.put('/change-password', verificarAuth, changePassword);
 
 //exportar router
 module.exports = router;

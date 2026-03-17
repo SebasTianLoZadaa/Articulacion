@@ -40,14 +40,14 @@ router.get('/categorias:id/stats', categoriaController.getEstadisticasCategoria)
 // POST /api/admin/categorias
 router.post('/categorias', categoriaController.crearCategoria);
 
-// PUT /api/admin/categorias
-router.put('/categorias', categoriaController.actualizarCategoria);
+// PUT /api/admin/categorias/:id
+router.put('/categorias/:id', categoriaController.actualizarCategoria);
 
-// patch /api/admin/categorias:id / toggle desactivar o activar categoria
-router.patch('/categorias', categoriaController.toggleCategoria);
+// patch /api/admin/categorias/:id / toggle desactivar o activar categoria
+router.patch('/categorias/:id', categoriaController.toggleCategoria);
 
 // delete /api/admin/categorias
-router.delete('/categorias/:id', categoriaController.eliminarCategoria);
+router.delete('/categorias/:id', soloAdministrador, categoriaController.eliminarCategoria);
 
 
 
@@ -64,14 +64,14 @@ router.get('/subcategorias:id/stats', subcategoriaController.getEstadisticasSubc
 // POST /api/admin/subcategorias
 router.post('/subcategorias', subcategoriaController.crearSubcategoria);
 
-// PUT /api/admin/subcategorias
-router.put('/subcategorias', subcategoriaController.actualizarSubcategoria);
+// PUT /api/admin/subcategorias/:id
+router.put('/subcategorias/:id', subcategoriaController.actualizarSubcategoria);
 
-// patch /api/admin/subcategorias:id / toggle desactivar o activar categoria
-router.patch('/subcategorias', subcategoriaController.toggleSubcategoria);
+// patch /api/admin/subcategorias/:id / toggle desactivar o activar categoria
+router.patch('/subcategorias/:id', subcategoriaController.toggleSubcategoria);
 
 // delete /api/admin/subcategorias
-router.delete('/subcategorias/:id', subcategoriaController.eliminarSubcategoria);
+router.delete('/subcategorias/:id', soloAdministrador, subcategoriaController.eliminarSubcategoria);
 
 
 //Rutas de producto
@@ -87,14 +87,14 @@ router.get('/productos/:id', productoController.getProductosById);
 // POST /api/admin/productos
 router.post('/productos', productoController.crearProducto);
 
-// PUT /api/admin/productos /stock
-router.put('/productos', productoController.actualizarProducto);
+// PUT /api/admin/productos/:id
+router.put('/productos/:id', productoController.actualizarProducto);
 
-// patch /api/admin/productos:id / stock
-router.patch('/productos', productoController.toggleProducto);
+// patch /api/admin/productos/:id / stock
+router.patch('/productos/:id', productoController.toggleProducto);
 
 // delete /api/admin/productos/:id
-router.delete('/productos/:id', productoController.eliminarProducto);
+router.delete('/productos/:id', soloAdministrador, productoController.eliminarProducto);
 
 
 
@@ -128,10 +128,10 @@ router.delete('/usuarios/:id', soloAdministrador, usuarioController.eliminarUsua
 router.get('/pedidos/estadisticas', pedidoController.getEstadisticasPedidos);
 
 // get /api/admin/pedidos
-router.get('/pedidos/:id', pedidoController.getAllPedidos);
+router.get('/pedidos', pedidoController.getAllPedidos);
 
 // get /api/admin/pedidos/:id
-router.get('/categorias:id/stats', pedidoController.getPedidoById);
+router.get('/pedidos/:id', pedidoController.getPedidoById);
 
 // PUT /api/admin/pedidos/:id/estado
 router.put('/pedidos/:id/estado', pedidoController.actualizarEstadoPedido);

@@ -23,7 +23,7 @@ const { generarToken } = require ('../config/jwt');
 
 const registrar = async (req, res) => {
     try {
-        const { nombre, apellido, email, password, telefono, direccion } = req.query;
+        const { nombre, apellido, email, password, telefono, direccion } = req.body;
 
         // validacion 1 verificar que todos los campos requeridos esten presentes
         if (!nombre || !apellido ||!email || !password ) {
@@ -220,7 +220,7 @@ const getMe = async (req, res) => {
 
         // Respuesta exitosa
         res.json ({
-            succes: true,
+            success: true,
             data: {
                 usuario
             }

@@ -29,7 +29,7 @@ const verificarAuth = async (req , res, next) => {
 
         if (!token) {
             return res.status(401).json({
-            sucsess: false,
+            success: false,
             message: 'token de autenticacion invalido'
         });
     }
@@ -50,7 +50,7 @@ const verificarAuth = async (req , res, next) => {
 
     // buscar el usuario de la base de datos 'paso 3'
 
-    const usuario = await Usuario.findByPk(decode.id, {
+    const usuario = await Usuario.findByPk(decoded.id, {
         attributes: {exclude: ['password']} //no incluir la contraseña en la request
     });
 
@@ -71,6 +71,7 @@ const verificarAuth = async (req , res, next) => {
 
         // paso 5 Agregar el usuario al objeto req para uso posterior
         //Ahora en los controladores podemos acceder a req.usuario
+        req.usuario = usuario;
 
         // continuar con el siguiente
         next();
@@ -98,7 +99,7 @@ const verificarAuthOpcional = async (req , res , next ) =>{
 
         // si no hay token continuar sin usuario
         if (!authHeader) {
-            req.Usuario = null;
+            req.usuario = null;
             return next();
 
         }
@@ -112,7 +113,7 @@ const verificarAuthOpcional = async (req , res , next ) =>{
 
         try {
             const decoded = verifyToken(token);
-            const usuario = await Usuario.findById (decoded.id, {
+            const usuario = await Usuario.findByPk (decoded.id, {
                 attributes : { exclude : ['password']}
             });
             if (usuario && usuario.activo) {

@@ -165,10 +165,8 @@ const esAdminOAuxiliar = (req , res , next) => {
             })
         }
 
-        // Verificar que el rol es administrador o auxiliar
-        if (!['administrador', 'auxiliar'].includes(req.usuario.rol))
-        
-        if (parseInt(usuarioIdParam) !== req.usuario.id) {
+        // Verificar que el rol es administrador o auxiliar o que accede a sus propios datos
+        if (!['administrador', 'auxiliar'].includes(req.usuario.rol) && parseInt(req.params.id) !== req.usuario.id) {
             return res.status(403).json ({
                 success: false,
                 message: 'acceso denegado se requiere permisos de administrador o auxiliar'

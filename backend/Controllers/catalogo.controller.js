@@ -189,11 +189,11 @@ const getProductosById = async (req, res) => {
 
     } catch (error) {
         console.error('Error en getProductoById: ', error);
-        res.status(500).json[{
+        res.status(500).json({
             success: false,
             message: 'Error al obtener producto',
             error: error.message
-        }]
+        });
     }
 };
 

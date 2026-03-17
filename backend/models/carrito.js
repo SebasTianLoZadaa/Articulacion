@@ -25,13 +25,11 @@ const Carrito = sequelize.define('Carrito', {
 
     },
 
-
     // UsuarioId ID del usuario dueño del carrito
     usuarioId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-
             model: 'Usuarios',
             key: 'id'
         },
@@ -40,44 +38,15 @@ const Carrito = sequelize.define('Carrito', {
         validate: {
             notNull: {
                 msg: 'Debe especificar su usuario'
-
-            }
-
-        }
-    },
-    
-    nombre: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        unique : {
-            msg: 'Ya existe una categoria con ese nombre'
-        },
-        validate : {
-            notEmpty: {
-                msg: 'El nombre de la categoria no puede estar vacio'
-            },
-            len: {
-                args: [2, 100],
-
             }
         }
     },
 
-    /**
-     * descripcion de la categoria
-     */
-
-    descripcion: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
-
-     // Producto ID del producto en el carrito 
+    // Producto ID del producto en el carrito
     productoId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-
             model: 'Productos',
             key: 'id'
         },
@@ -86,9 +55,7 @@ const Carrito = sequelize.define('Carrito', {
         validate: {
             notNull: {
                 msg: 'Debe especificar su producto'
-
             }
-
         }
     },
 
@@ -110,7 +77,7 @@ const Carrito = sequelize.define('Carrito', {
 
     /**
      * Precio Unitario del producto al momento de agregarlo al carrito
-     * se guarda para mantener el precio aunque el producto cambie de precio 
+     * se guarda para mantener el precio aunque el producto cambie de precio
      */
     precioUnitario: {
         type: DataTypes.DECIMAL(10, 2),
@@ -152,8 +119,8 @@ const Carrito = sequelize.define('Carrito', {
              *verifica que este activo y tenga stock suficiente para agregarlo al carrito
              */
 
-            beforeCreate: async (itemCatrrito, options) => {
-                const Categoria = require('./producto');
+            beforeCreate: async (itemCarrito, options) => {
+                const Producto = require('./producto');
 
                 //buscar producto
                 const producto = await Producto.findByPk(itemCarrito.productoId);
@@ -168,7 +135,7 @@ const Carrito = sequelize.define('Carrito', {
                 }
 
                 if (!producto.hayStock(itemCarrito.cantidad)) {
-                    throw new Error(`Stock insuficiente, solo hay ${producto.stock} unidades diisponibles`);
+                    throw new Error(`Stock insuficiente, solo hay ${producto.stock} unidades disponibles`);
                 }
 
                 //Guardar el precio actual del producto

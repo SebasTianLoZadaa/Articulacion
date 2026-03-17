@@ -55,7 +55,7 @@ const getUsuarios = async (req, res) => {
 
         // respuesta exitosa
         res.json({
-            succes: true,
+            success: true,
             data: {
                 usuarios,
                 paginacion: {
@@ -88,7 +88,7 @@ const getUsuarios = async (req, res) => {
 
 const getUsuariosById = async (req, res) => {
     try {
-        const {id} = req.query;
+        const {id} = req.params;
 
         //Buscar usuarios
         const usuario = await Usuario.findByPk (id, {
@@ -99,7 +99,7 @@ const getUsuariosById = async (req, res) => {
 
         if (!usuario) {
             return res.status(404).json({
-                succes: false,
+                success: false,
                 message: 'Usuario no encontrado'
             });
         }
@@ -107,7 +107,7 @@ const getUsuariosById = async (req, res) => {
 
         //respuesta exitosa
         res.json({
-            succes: true,
+            success: true,
             data: {
                 usuario
             }

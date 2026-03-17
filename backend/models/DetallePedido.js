@@ -50,32 +50,6 @@ const DetallePedido = sequelize.define('DetallePedido', {
         }
     },
     
-    nombre: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        unique : {
-            msg: 'Ya existe una categoria con ese nombre'
-        },
-        validate : {
-            notEmpty: {
-                msg: 'El nombre de la categoria no puede estar vacio'
-            },
-            len: {
-                args: [2, 100],
-
-            }
-        }
-    },
-
-    /**
-     * descripcion de la categoria
-     */
-
-    descripcion: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
-
      // Producto ID del producto en el carrito
     productoId: {
         type: DataTypes.INTEGER,
