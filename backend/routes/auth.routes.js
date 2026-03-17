@@ -17,6 +17,8 @@ const {
     changePassword,
 } = require ('../Controllers/auth.controller');
 
+console.log('DEBUG register:', { register });
+
 //importar middleware
 const  {verificarAuth} = require ('../middleware/auth');
 
@@ -30,9 +32,9 @@ router.post('/login', login);
 
 router.get('/me', verificarAuth, getMe);
 
-router.put('/me', verificarAuth, updateMe);
+router.get('/me', verificarAuth, updateMe);
 
-router.put('/change-password', verificarAuth, changePassword);
+router.get('/change.password', verificarAuth, changePassword);
 
 //exportar router
 module.exports = router;

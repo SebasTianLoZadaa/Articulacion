@@ -107,12 +107,12 @@ const getCategoriasById = async (req, res) => {
         delete categoriaJSON.productos; //no enviar la lista completa solo el contador
 
         //respuesta exitosa
-        res.json({
-            succes: true,
-            data: {
-                categoria: categoriaJSON
-            }
-        });
+            res.json({
+                success: true,
+                data: {
+                    categoria: categoriaJSON
+                }
+            });
 
     } catch (error) {
         console.error('Error en getCategoriasById: ', error);

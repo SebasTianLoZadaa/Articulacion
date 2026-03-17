@@ -173,10 +173,9 @@ const Usuario = sequelize.define('Usuario', {
 
             beforeUpdate: async (usuario) => {
                 //verificar si la contraseña fue modificada
-                if (categoria.changed('password')) {
+                if (usuario.changed('password')) {
                     const salt = await bcrypt.genSalt(10);
                     usuario.password = await bcrypt.hash(usuario.password, salt);
-                    
                 }
             }
 
