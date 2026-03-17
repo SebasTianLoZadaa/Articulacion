@@ -194,7 +194,7 @@ const crearPedido = async (req, res) => {
         //Respuesta exitosa
     
 
-        res.json({
+        res.status(201).json({
             success: true,
             message: 'Pedido creado exitosamente',
             data: {

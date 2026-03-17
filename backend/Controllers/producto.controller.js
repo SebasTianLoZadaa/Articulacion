@@ -114,7 +114,7 @@ const getProductos = async (req, res) => {
             message: 'error al obtener productos', error: error.message
         })
     }
-};
+}
 
 /**
  * obtener los productos por id
@@ -130,17 +130,18 @@ const getProductosById = async (req, res) => {
 
         //buscar productos con relacion
         const producto = await Producto.findByPk(id, {
-            include: [{
-                model: Categoria,
-                as: 'categoria',
-                attributes: ['id', 'nombre', 'activo']
-            }],
-
-            include: [{
-                model: Subcategoria,
-                as: 'subcategoria',
-                attributes: ['id', 'nombre', 'activo']
-            }]
+            include: [
+                {
+                    model: Categoria,
+                    as: 'categoria',
+                    attributes: ['id', 'nombre', 'activo']
+                },
+                {
+                    model: Subcategoria,
+                    as: 'subcategoria',
+                    attributes: ['id', 'nombre', 'activo']
+                }
+            ]
         });
         
 
@@ -312,19 +313,20 @@ const crearProducto =async (req, res) => {
             
             
             }
-                if (error.name === 'SequelizeValidationError') {
-                    return res.status(400).json({
-                        success: false,
-                        message: 'Error de validacion',
-                        errors: error.errors.map(e => e.message)
-                    });
-                }
+            if (error.name === 'SequelizeValidationError') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Error de validacion',
+                    errors: error.errors.map(e => e.message)
+                });
             }
-        res.status(500).json({
-            success: false,
-            message: 'Error al crear producto',
-            error: error.message
-        });
+        
+            return res.status(500).json({
+                success: false,
+                message: 'Error al crear producto',
+                error: error.message
+            });
+        }
     }
 
 // HASTA AQUI  CORRECCION PROFE
@@ -546,33 +548,32 @@ const toggleProducto = async (req, res) => {
  */
 const eliminarProducto = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
 
-        //buscar producto
+        // Buscar producto
         const producto = await Producto.findByPk(id);
-            if (!producto) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Prodcuto no encontrado'
-                });
-            }
-
-            // el hook beforeDestroy se ebcarga de eliminar la imagen
-            await producto.destroy();
-            res.json ({
-                success: true,
-                message: 'producto eliminado exitosamente'
-            });
-
-        } catch (error) {
-            console.error('Error al eliminar el producto:', error)
-            res.status(500).json({
+        if (!producto) {
+            return res.status(404).json({
                 success: false,
-                message: 'Error al eliminar el producto',
-                error: error.message
+                message: 'Producto no encontrado'
             });
         }
-    };
+
+        // El hook beforeDestroy se encarga de eliminar la imagen
+        await producto.destroy();
+        return res.json({
+            success: true,
+            message: 'Producto eliminado exitosamente'
+        });
+    } catch (error) {
+        console.error('Error al eliminar el producto:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error al eliminar el producto',
+            error: error.message
+        });
+    }
+};
 
     /**
      * Actualizar stock de un producto 
