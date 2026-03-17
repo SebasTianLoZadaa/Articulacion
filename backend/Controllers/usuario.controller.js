@@ -88,7 +88,7 @@ const getUsuarios = async (req, res) => {
 
 const getUsuariosById = async (req, res) => {
     try {
-        const {id} = req.params;
+        const {id} = req.query;
 
         //Buscar usuarios
         const usuario = await Usuario.findByPk (id, {

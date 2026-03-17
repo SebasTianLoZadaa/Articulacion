@@ -34,7 +34,7 @@ const { syncDataBase, testConnection } = require('./config/database');
 const app = express();
 
 // Obtener el puerto desde la variable de entorno
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 //MIDDLEWARES GLOBALES
 

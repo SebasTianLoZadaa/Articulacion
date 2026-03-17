@@ -585,7 +585,6 @@ const actualizarEstadoPedido = async (req , res) => {
             success: false,
             message: 'Error al actualizar el estado del pedido',
             error: error.message
-                res.status(201).json({
         });
     }
 };

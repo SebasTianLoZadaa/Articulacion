@@ -21,7 +21,7 @@ const { generarToken } = require ('../config/jwt');
  * @param {Object} res response Express
  */
 
-const registrar = async (req, res) => {
+const register = async (req, res) => {
     try {
         const { nombre, apellido, email, password, telefono, direccion } = req.body;
 
@@ -358,11 +358,13 @@ const updateMe = async (req, res) => {
     }
 };
 
+console.log('INICIO AUTH CONTROLLER');
 //exportar todos los controladores
+console.log('ANTES DE EXPORTS AUTH CONTROLLER');
 module.exports = {
-    registrar,
+    register,
     login,
     getMe,
     updateMe,
-    changePassword
+    changePassword,
 };
