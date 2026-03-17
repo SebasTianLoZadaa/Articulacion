@@ -633,12 +633,12 @@ const eliminarProducto = async (req, res) => {
                 return res.status(400).json({
                     succes: false,
                     message: 'Opcion invalida usa aumentar, reducir o establecer'
-                });
-
+                });  
+     
 
 
             }
-            producto.stock = nuevoStock;
+            producto.stock = 
             await producto.save ();
 
             res.json ({
